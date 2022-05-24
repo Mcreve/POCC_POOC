@@ -1,0 +1,1 @@
+sap.ui.define(["com/delaware/df5-mm-po-confirm-cp/controller/Master.controller"],function(t){"use strict";QUnit.module("Master Controller");QUnit.test("I should test the Master controller",function(e){var o=new t;o.onInit();e.ok(o)})});                   

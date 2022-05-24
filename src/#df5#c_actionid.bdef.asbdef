@@ -1,0 +1,34 @@
+projection;
+
+define behavior for /DF5/C_ACTIONID //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+
+  use association _ConfLines { create; }
+}
+
+define behavior for /DF5/C_POCONF_ID //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+
+  use association _Lines { create; }
+  use association _Log { create; }
+}
+
+define behavior for /DF5/C_POCONF_LIST //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+}
+
+define behavior for /DF5/C_POCONF_LOG //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+}

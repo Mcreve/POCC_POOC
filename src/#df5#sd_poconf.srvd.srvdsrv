@@ -1,0 +1,9 @@
+@EndUserText.label: 'PO Confirmation'
+define service /DF5/SD_POCONF {
+  expose /DF5/C_POCONF_LIST;
+  expose /DF5/C_POCONF_LOG;
+  expose /DF5/C_POCONF_ID;
+  expose /DF5/C_ACTIONID;
+  expose /DF5/C_EKES;
+  expose /DF5/C_MM_PRODUCTSTORAGELOC_VH;
+}

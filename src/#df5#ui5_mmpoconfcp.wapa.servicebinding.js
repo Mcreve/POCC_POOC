@@ -1,0 +1,1 @@
+function initModel(){var a="/sap/opu/odata/dlwfast1/UI_POCONF_V2/";var e=new sap.ui.model.odata.ODataModel(a,true);sap.ui.getCore().setModel(e)}                                                                                                               

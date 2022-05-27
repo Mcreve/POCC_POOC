@@ -4,19 +4,19 @@ steps:
 - script: |
     npm install @abaplint/cli -g
   displayName: 'abaplint Install'
-- checkout: git://GCC FAST Core/abaplint_configuration
-  path: abaplint_conf
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Agent.BuildDirectory)\abaplint_conf'
-    Contents: 'abaplint.json'
-    TargetFolder: '$(Agent.BuildDirectory)\s'
-  displayName: 'Copy abaplint.json to repo'
-- checkout: self
+# - checkout: git://GCC FAST Core/abaplint_configuration
+#   path: abaplint_conf
+# - task: CopyFiles@2
+#   inputs:
+#     SourceFolder: '$(Agent.BuildDirectory)\abaplint_conf'
+#     Contents: 'abaplint.json'
+#     TargetFolder: '$(Agent.BuildDirectory)\s'
+#   displayName: 'Copy abaplint.json to repo'
+# - checkout: self
 - script: dir
-- script: |
-    more $(Agent.BuildDirectory)\s\abaplint.json
-  displayName: 'Read abaplint.json file'
+# - script: |
+#     more $(Agent.BuildDirectory)\s\abaplint.json
+#   displayName: 'Read abaplint.json file'
 - script: |
     abaplint --version
   displayName: 'abaplint Version'

@@ -25,7 +25,7 @@ steps:
   displayName: 'abaplint Version'
 - script: |
     cd $(Agent.BuildDirectory)\s\MM_PO_CONF &
-    abaplint -f standard --outformat junit --outfile report.xml || true
+    abaplint -f standard --outformat junit --outfile $(Agent.BuildDirectory)\report.xml || true
   displayName: 'abaplint Run'
 - task: PublishTestResults@2
   inputs:

@@ -4,7 +4,6 @@ steps:
 - script: |
     npm install @abaplint/cli -g
   displayName: 'abaplint Install'
-# - script: dir
 - checkout: git://GCC FAST Core/abaplint_configuration
   path: abaplint_conf
 - checkout: self
@@ -14,9 +13,6 @@ steps:
     Contents: 'abaplint.json'
     TargetFolder: '$(Agent.BuildDirectory)\s\MM_PO_CONF'
   displayName: 'Copy abaplint.json to repo'
-# - script: dir
-# - script: cd $(Agent.BuildDirectory)\s\MM_PO_CONF
-# - script: dir
 - script: |
     more $(Agent.BuildDirectory)\s\MM_PO_CONF\abaplint.json
   displayName: 'Read abaplint.json file'
@@ -27,11 +23,6 @@ steps:
     cd $(Agent.BuildDirectory)\s\MM_PO_CONF &
     abaplint -f standard --outformat junit --outfile $(Agent.BuildDirectory)\s\report.xml || true
   displayName: 'abaplint Run'
-# - script: |
-#     abaplint -f standard --outformat junit --outfile $(Agent.BuildDirectory)\report.xml || true
-#   displayName: 'abaplint Run'
-# - script: dir
-# - script: cd $(Agent.BuildDirectory)\s & dir
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'

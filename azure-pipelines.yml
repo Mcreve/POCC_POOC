@@ -8,7 +8,7 @@ steps:
   path: abaplint_conf
 - script: dir ..\
 - script: |
-    copy abaplint.json ..\s\
+    copy $(Agent.BuildDirectory)\abaplint.json $(Agent.BuildDirectory)\s\
   displayName: 'Copy abaplint.json to repo'
 #- task: PowerShell@2
 #  inputs:

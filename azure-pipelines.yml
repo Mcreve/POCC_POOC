@@ -4,9 +4,12 @@ steps:
 #- script: |
 #    npm install @abaplint/cli -g
 #  displayName: 'abaplint Install'
-- checkout: git://GCC FAST Core/SD_ORDER_BOOK
-  path: test
+- checkout: git://GCC FAST Core/abaplint_configuration
+  path: abaplint_conf
 - script: dir
+- script: |
+    Copy-Item "abaplint.json" -Destination "..\s"
+  displayName: 'Copy abaplint.json to repo'
 #- checkout: self
 #- script: |
 #    abaplint --version

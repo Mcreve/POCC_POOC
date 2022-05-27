@@ -13,9 +13,6 @@ steps:
     Contents: 'abaplint.json'
     TargetFolder: '$(Agent.BuildDirectory)\s\MM_PO_CONF'
   displayName: 'Copy abaplint.json to repo'
-# - script: |
-#     more $(Agent.BuildDirectory)\s\MM_PO_CONF\abaplint.json
-#   displayName: 'Read abaplint.json file'
 - script: |
     abaplint --version
   displayName: 'abaplint Version'

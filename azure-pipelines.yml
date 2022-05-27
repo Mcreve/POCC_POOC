@@ -4,7 +4,7 @@ steps:
 #- script: |
 #    npm install @abaplint/cli -g
 #  displayName: 'abaplint Install'
-- checkout: git://GCC%20FAST%20Core/SD_ORDER_BOOK
+- checkout: git://GCC FAST Core/SD_ORDER_BOOK
   path: test
 - script: dir
 #- checkout: self

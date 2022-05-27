@@ -4,6 +4,9 @@ steps:
 - script: |
     npm install @abaplint/cli -g
   displayName: 'abaplint Install'
+#- checkout: git://FAST-Solution-DLWR/GCC%20FAST%20Core/MM_PO_CONF
+- script: dir
+#- checkout: self
 - script: |
     abaplint --version
   displayName: 'abaplint Version'

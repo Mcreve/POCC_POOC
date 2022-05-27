@@ -4,7 +4,7 @@ steps:
 - script: |
     npm install @abaplint/cli -g
   displayName: 'abaplint Install'
-- script: dir
+# - script: dir
 - checkout: git://GCC FAST Core/abaplint_configuration
   path: abaplint_conf
 - checkout: self
@@ -27,6 +27,8 @@ steps:
     cd $(Agent.BuildDirectory)\s\MM_PO_CONF &
     abaplint -f standard --outformat junit --outfile $(Agent.BuildDirectory)\report.xml || true
   displayName: 'abaplint Run'
+- script: dir
+- script: cd $(Agent.BuildDirectory)\s & dir
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'

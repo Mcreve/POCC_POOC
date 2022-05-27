@@ -4,15 +4,16 @@ steps:
 - script: |
     npm install @abaplint/cli -g
   displayName: 'abaplint Install'
+- script: dir
 - checkout: git://GCC FAST Core/abaplint_configuration
   path: abaplint_conf
+- checkout: self
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.BuildDirectory)\abaplint_conf'
     Contents: 'abaplint.json'
     TargetFolder: '$(Agent.BuildDirectory)\s\MM_PO_CONF'
   displayName: 'Copy abaplint.json to repo'
-- checkout: self
 - script: dir
 - script: |
     more $(Agent.BuildDirectory)\s\MM_PO_CONF\abaplint.json

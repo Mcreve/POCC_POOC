@@ -1,36 +1,26 @@
 pool:
   vmImage: 'windows-2019'
 steps:
-#- script: |
-#    npm install @abaplint/cli -g
-#  displayName: 'abaplint Install'
+- script: |
+    npm install @abaplint/cli -g
+  displayName: 'abaplint Install'
 - checkout: git://GCC FAST Core/abaplint_configuration
   path: abaplint_conf
-- script: dir ..\
-# - script: |
-#     copy $(Agent.BuildDirectory)\abaplint.json $(Agent.BuildDirectory)\s\
-#   displayName: 'Copy abaplint.json to repo'
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.BuildDirectory)\abaplint_conf'
     Contents: 'abaplint.json'
     TargetFolder: '$(Agent.BuildDirectory)\s'
-#- task: PowerShell@2
-#  inputs:
-#    script: Copy-Item -Path "$(Agent.BuildDirectory)\abaplint_conf\abaplint.json" -Destination "$(Agent.BuildDirectory)\s\"
-#  displayName: 'Copy abaplint.json to repo'
-#- script: |
-#    Copy-Item "abaplint.json" -Destination "..\s"
-#  displayName: 'Copy abaplint.json to repo'
-#- checkout: self
-#- script: |
-#    abaplint --version
-#  displayName: 'abaplint Version'
-#- script: |
-#    abaplint -f standard --outformat junit --outfile report.xml || true
-#  displayName: 'abaplint Run'
-#- task: PublishTestResults@2
-#  inputs:
-#    testResultsFormat: 'JUnit'
-#    testResultsFiles: 'report.xml'
-#    failTaskOnFailedTests: false
+  displayName: 'Copy abaplint.json to repo'
+- checkout: self
+- script: |
+    abaplint --version
+  displayName: 'abaplint Version'
+- script: |
+    abaplint -f standard --outformat junit --outfile report.xml || true
+  displayName: 'abaplint Run'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'report.xml'
+    failTaskOnFailedTests: false

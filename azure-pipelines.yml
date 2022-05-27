@@ -1,21 +1,21 @@
 pool:
   vmImage: 'windows-2019'
 steps:
-#- script: |
-#    npm install @abaplint/cli -g
-#  displayName: 'abaplint Install'
+- script: |
+    npm install @abaplint/cli -g
+  displayName: 'abaplint Install'
 - checkout: git://FAST-Solution-DLWR/GCC%20FAST%20Core/SD_ORDER_BOOK
   path: test
 - script: dir
 #- checkout: self
-#- script: |
-#    abaplint --version
-#  displayName: 'abaplint Version'
-#- script: |
-#    abaplint -f standard --outformat junit --outfile report.xml || true
-#  displayName: 'abaplint Run'
-#- task: PublishTestResults@2
-#  inputs:
-#    testResultsFormat: 'JUnit'
-#    testResultsFiles: 'report.xml'
-#    failTaskOnFailedTests: false
+- script: |
+    abaplint --version
+  displayName: 'abaplint Version'
+- script: |
+    abaplint -f standard --outformat junit --outfile report.xml || true
+  displayName: 'abaplint Run'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'report.xml'
+    failTaskOnFailedTests: false

@@ -13,18 +13,15 @@ steps:
     Contents: 'abaplint.json'
     TargetFolder: '$(Agent.BuildDirectory)\s\MM_PO_CONF'
   displayName: 'Copy abaplint.json to repo'
-- script: |
-    more $(Agent.BuildDirectory)\s\MM_PO_CONF\abaplint.json
-  displayName: 'Read abaplint.json file'
+# - script: |
+#     more $(Agent.BuildDirectory)\s\MM_PO_CONF\abaplint.json
+#   displayName: 'Read abaplint.json file'
 - script: |
     abaplint --version
   displayName: 'abaplint Version'
-- script: dir
-- script: cd $(Agent.BuildDirectory) & dir
-- script: cd $(Agent.BuildDirectory)\abaplint_conf & dir
 - script: |
     cd $(Agent.BuildDirectory)\s\MM_PO_CONF &
-    abaplint $(Agent.BuildDirectory)\abaplint_conf\abaplint.json -f standard --outformat junit --outfile $(Agent.BuildDirectory)\s\report.xml || true
+    abaplint $(Agent.BuildDirectory)\s\MM_PO_CONF\abaplint.json -f standard --outformat junit --outfile $(Agent.BuildDirectory)\s\report.xml || true
   displayName: 'abaplint Run'
 - task: PublishTestResults@2
   inputs:

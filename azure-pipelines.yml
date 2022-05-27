@@ -7,9 +7,14 @@ steps:
 - checkout: git://GCC FAST Core/abaplint_configuration
   path: abaplint_conf
 - script: dir ..\
-- script: |
-    copy $(Agent.BuildDirectory)\abaplint.json $(Agent.BuildDirectory)\s\
-  displayName: 'Copy abaplint.json to repo'
+# - script: |
+#     copy $(Agent.BuildDirectory)\abaplint.json $(Agent.BuildDirectory)\s\
+#   displayName: 'Copy abaplint.json to repo'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Agent.BuildDirectory)\abaplint_conf'
+    Contents: 'abaplint.json'
+    TargetFolder: '$(Agent.BuildDirectory)\s'
 #- task: PowerShell@2
 #  inputs:
 #    script: Copy-Item -Path "$(Agent.BuildDirectory)\abaplint_conf\abaplint.json" -Destination "$(Agent.BuildDirectory)\s\"

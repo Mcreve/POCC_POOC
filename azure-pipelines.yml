@@ -7,9 +7,13 @@ steps:
 - checkout: git://GCC FAST Core/abaplint_configuration
   path: abaplint_conf
 - script: dir
-- script: |
-    Copy-Item "abaplint.json" -Destination "..\s"
+- task: PowerShell@2
+  inputs:
+    script: Copy-Item "abaplint.json" -Destination ".\s\"
   displayName: 'Copy abaplint.json to repo'
+#- script: |
+#    Copy-Item "abaplint.json" -Destination "..\s"
+#  displayName: 'Copy abaplint.json to repo'
 #- checkout: self
 #- script: |
 #    abaplint --version

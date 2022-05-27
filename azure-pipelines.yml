@@ -10,13 +10,12 @@ steps:
   inputs:
     SourceFolder: '$(Agent.BuildDirectory)\abaplint_conf'
     Contents: 'abaplint.json'
-    TargetFolder: '$(Agent.BuildDirectory)\s'
+    TargetFolder: '$(Agent.BuildDirectory)\s\MM_PO_CONF'
   displayName: 'Copy abaplint.json to repo'
-# - checkout: self
-- script: cd $(Agent.BuildDirectory)\s
+- checkout: self
 - script: dir
 - script: |
-    more $(Agent.BuildDirectory)\s\abaplint.json
+    more $(Agent.BuildDirectory)\s\MM_PO_CONF\abaplint.json
   displayName: 'Read abaplint.json file'
 - script: |
     abaplint --version

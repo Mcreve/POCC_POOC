@@ -9,7 +9,7 @@ steps:
 - script: dir
 - task: PowerShell@2
   inputs:
-    script: Copy-Item "abaplint.json" -Destination ".\s\"
+    script: Copy-Item -Path "$(Agent.BuildDirectory)\abaplint_conf\abaplint.json" -Destination "$(Agent.BuildDirectory)\s\"
   displayName: 'Copy abaplint.json to repo'
 #- script: |
 #    Copy-Item "abaplint.json" -Destination "..\s"

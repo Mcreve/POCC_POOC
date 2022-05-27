@@ -20,6 +20,7 @@ steps:
     abaplint --version
   displayName: 'abaplint Version'
 - script: dir
+- script: cd $(Agent.BuildDirectory)\s & dir
 - script: |
     cd $(Agent.BuildDirectory)\s\MM_PO_CONF &
     abaplint $(Agent.BuildDirectory)\abaplint_conf\abaplint.json -f standard --outformat junit --outfile $(Agent.BuildDirectory)\s\report.xml || true

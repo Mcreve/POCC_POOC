@@ -4,17 +4,17 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Transpose to one eket line closest date'
 define view /DF5/I_EKET_DELDATE
-  as select from eket
-    inner join   /DF5/P_EKET_TF as _NearestDate on  _NearestDate.PurchaseOrder     = eket.ebeln
-                                                and _NearestDate.PurchaseOrderLine = eket.ebelp
-                                                and _NearestDate.Date              = eket.eindt
+  as select from /DF5/I_EKET    as _eket
+    inner join   /DF5/P_EKET_TF as _NearestDate on  _eket.Ebeln = _NearestDate.PurchaseOrder
+                                                and _eket.Ebelp = _NearestDate.PurchaseOrderLine
+                                                and _eket.Eindt = _NearestDate.Date
 {
-  ebeln         as PurchaseOrder,
-  ebelp         as PurchaseOrderLine,
-  eindt         as DelDate,
-  max(uniqueid) as UniqueID
+  Ebeln         as PurchaseOrder,
+  Ebelp         as PurchaseOrderLine,
+  Eindt         as DelDate,
+  max(Uniqueid) as UniqueID
 }
 group by
-  ebeln,
-  ebelp,
-  eindt
+  Ebeln,
+  Ebelp,
+  Eindt

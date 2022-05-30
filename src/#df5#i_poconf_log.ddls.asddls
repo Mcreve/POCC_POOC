@@ -9,8 +9,6 @@ define view /DF5/I_POCONF_LOG
   association to parent /DF5/I_POCONF_ID as _header on  _header.actionid      = $projection.zactionid
                                                     and _header.purchaseorder = $projection.purchaseorder
 {
-
-      ///df5/db_pocl
   key zactionid,
   key purchaseorder,
   key zlogid,
@@ -27,6 +25,7 @@ define view /DF5/I_POCONF_LOG
       zrow,
       zfield,
       zsystem,
+      
+      /* Associations */
       _header
-
 }

@@ -4,20 +4,20 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Purchase Order Confirmations header'
 define view /DF5/I_POCONF_HEAD
-  as select from ekko as POHeader
+  as select from /DF5/I_EKKO as POHeader
 
-  association [1..1] to /DF5/I_POCONF_ITEMS as _Items    on _Items.PurchaseOrder = POHeader.ebeln
-  association [0..1] to I_Supplier          as _Supplier on _Supplier.Supplier = POHeader.lifnr
+  association [1..1] to /DF5/I_POCONF_ITEMS as _Items    on _Items.PurchaseOrder = POHeader.Ebeln
+  association [0..1] to I_Supplier          as _Supplier on _Supplier.Supplier = POHeader.Lifnr
 {
-  key POHeader.ebeln,
+  key POHeader.Ebeln,
   key _Items.PurchaseOrderItem,
   key _Items.SupplierConfirmation,
-      _Items.PurchaseOrder as PurchaseOrder,
-      POHeader.lifnr                as Supplier,
+      _Items.PurchaseOrder          as PurchaseOrder,
+      POHeader.Lifnr                as Supplier,
       _Supplier.OrganizationBPName1 as SupplierName,
-      POHeader.ekorg                as PurchOrganisation,
-      POHeader.ekgrp                as PurchGroup,
-      POHeader.bedat                as PODate,
+      POHeader.Ekorg                as PurchOrganisation,
+      POHeader.Ekgrp                as PurchGroup,
+      POHeader.Bedat                as PODate,
 
       _Items.Material,
       _Items.MaterialClass,
@@ -35,16 +35,16 @@ define view /DF5/I_POCONF_HEAD
       _Items.eket_eindt,
       _Items.eket_menge,
       _Items.UoM,
-      POHeader.waers                as Currency,
-      
+      POHeader.Waers                as Currency,
+
       /* Associations */
       _Items,
       _Supplier,
       _Items._Product
 }
 where
-      POHeader.loekz  =  ''
-  and POHeader.memory =  ''
-  and POHeader.frgrl  =  ''
-  and POHeader.autlf  <> 'X'
+      POHeader.Loekz  =  ''
+  and POHeader.Memory =  ''
+  and POHeader.Frgrl  =  ''
+  and POHeader.Autlf  <> 'X'
   and _Items.PurchaseOrderItem != '00000'

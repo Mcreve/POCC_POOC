@@ -4,39 +4,39 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Purchase Order Confirmations line item'
 define view /DF5/I_POCONF_ITEMS
-  as select from ekpo as PurchaseOrders
+  as select from /DF5/I_EKPO as PurchaseOrders
 
-  association [0..*] to ekes                   as _ekes    on  PurchaseOrders.ebeln = _ekes.ebeln
-                                                           and PurchaseOrders.ebelp = _ekes.ebelp
-                                                           and _ekes.ebtyp          = 'AB'
+  association [0..*] to /DF5/I_EKES            as _ekes    on  PurchaseOrders.Ebeln = _ekes.Ebeln
+                                                           and PurchaseOrders.Ebelp = _ekes.Ebelp
+                                                           and _ekes.Ebtyp          = 'AB'
 
-  association [1..1] to /DF5/I_EKET_DELDATEQTY as _eket    on  PurchaseOrders.ebeln = _eket.PurchaseOrder
-                                                           and PurchaseOrders.ebelp = _eket.PurchaseOrderLine
+  association [1..1] to /DF5/I_EKET_DELDATEQTY as _eket    on  PurchaseOrders.Ebeln = _eket.PurchaseOrder
+                                                           and PurchaseOrders.Ebelp = _eket.PurchaseOrderLine
 
-  association [0..1] to I_Product              as _Product on  PurchaseOrders.matnr = _Product.Product
+  association [0..1] to I_Product              as _Product on  PurchaseOrders.Matnr = _Product.Product
 {
-  key PurchaseOrders.ebeln as PurchaseOrder,
-  key PurchaseOrders.ebelp as PurchaseOrderItem,
-  key _ekes.etens          as SupplierConfirmation,
+  key PurchaseOrders.Ebeln as PurchaseOrder,
+  key PurchaseOrders.Ebelp as PurchaseOrderItem,
+  key _ekes.Etens          as SupplierConfirmation,
 
-      PurchaseOrders.werks as Plant,
-      PurchaseOrders.lgort as StorageLocation,
+      PurchaseOrders.Werks as Plant,
+      PurchaseOrders.Lgort as StorageLocation,
       @ObjectModel.text.association: '_Product'
-      PurchaseOrders.matnr as Material,
-      PurchaseOrders.matkl as MaterialClass,
-      PurchaseOrders.menge as RequestedQuantity,
-      PurchaseOrders.netpr as NetPrice,
-      PurchaseOrders.meins as UoM,
+      PurchaseOrders.Matnr as Material,
+      PurchaseOrders.Matkl as MaterialClass,
+      PurchaseOrders.Menge as RequestedQuantity,
+      PurchaseOrders.Netpr as NetPrice,
+      PurchaseOrders.Meins as UoM,
 
-      PurchaseOrders.loekz,
+      PurchaseOrders.Loekz,
 
-      _ekes.ebeln          as ekes_ebeln,
-      _ekes.ebelp          as ekes_ebelp,
-      _ekes.eindt          as ekes_eindt,
-      _ekes.menge          as ekes_menge,
-      _ekes.xblnr          as Reference,
-      _ekes.ebtyp          as ekes_ebtyp,
-      _ekes.dabmg          as ReducedQuantity,
+      _ekes.Ebeln          as ekes_ebeln,
+      _ekes.Ebelp          as ekes_ebelp,
+      _ekes.Eindt          as ekes_eindt,
+      _ekes.Menge          as ekes_menge,
+      _ekes.Xblnr          as Reference,
+      _ekes.Ebtyp          as ekes_ebtyp,
+      _ekes.Dabmg          as ReducedQuantity,
 
       _eket.DelDate        as eket_eindt,
       _eket.Quantity       as eket_menge,
@@ -47,7 +47,7 @@ define view /DF5/I_POCONF_ITEMS
       _Product
 }
 where
-      loekz is initial
-  and bstae is not initial
-  and elikz is initial
-  and attyp <> '01'
+      Loekz is initial
+  and Bstae is not initial
+  and Elikz is initial
+  and Attyp <> '01'

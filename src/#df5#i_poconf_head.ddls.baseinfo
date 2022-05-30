@@ -3,9 +3,9 @@
 {
 "FROM":
 [
+"/DF5/I_EKKO",
 "/DF5/I_POCONF_ITEMS",
-"I_SUPPLIER",
-"EKKO"
+"I_SUPPLIER"
 ],
 "ASSOCIATED":
 [

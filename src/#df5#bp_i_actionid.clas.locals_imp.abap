@@ -18,7 +18,7 @@ CLASS lcl_buffer DEFINITION.
 
 ENDCLASS.
 
-CLASS lhc_I_ACTIONID DEFINITION INHERITING FROM cl_abap_behavior_handler.
+CLASS lhc_i_actionid DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
     METHODS create FOR MODIFY
@@ -33,20 +33,20 @@ CLASS lhc_I_ACTIONID DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS read FOR READ
       IMPORTING keys FOR READ /df5/i_actionid RESULT result.
 
-    METHODS cba_ConfLines FOR MODIFY
-      IMPORTING entities_cba FOR CREATE /df5/i_actionid\_ConfLines.
+    METHODS cba_conflines FOR MODIFY
+      IMPORTING entities_cba FOR CREATE /df5/i_actionid\_conflines.
 
-    METHODS rba_ConfLines FOR READ
-      IMPORTING keys_rba FOR READ /df5/i_actionid\_ConfLines FULL result_requested RESULT result LINK association_links.
+    METHODS rba_conflines FOR READ
+      IMPORTING keys_rba FOR READ /df5/i_actionid\_conflines FULL result_requested RESULT result LINK association_links.
 
 ENDCLASS.
 
-CLASS lhc_I_ACTIONID IMPLEMENTATION.
+CLASS lhc_i_actionid IMPLEMENTATION.
 
   METHOD create.
     DATA lv_guid_22 TYPE sysuuid_22.
 
-    CALL FUNCTION 'GUID_CREATE'
+    CALL FUNCTION 'GUID_CREATE' "TODO: Not released, replace entire functionality with sysuuid_x16 (see other devs)
       IMPORTING
         ev_guid_22 = lv_guid_22.
 
@@ -63,7 +63,7 @@ CLASS lhc_I_ACTIONID IMPLEMENTATION.
         APPEND VALUE #( %cid     = ls_action_header-%cid
                         actionid = lv_guid_22 ) TO mapped-/df5/i_actionid.
 
-      CATCH cx_sy_itab_line_not_found.
+      CATCH cx_sy_itab_line_not_found.                  "#EC NO_HANDLER
     ENDTRY.
 
   ENDMETHOD.
@@ -77,23 +77,23 @@ CLASS lhc_I_ACTIONID IMPLEMENTATION.
   METHOD read.
   ENDMETHOD.
 
-  METHOD cba_ConfLines.
+  METHOD cba_conflines.
     TRY.
         DATA(lt_conf) = entities_cba[ 1 ].
         LOOP AT lt_conf-%target ASSIGNING FIELD-SYMBOL(<ls_conf>).
           APPEND CORRESPONDING #( <ls_conf> ) TO lcl_buffer=>ms_buffer-mt_buffer_conf_header.
         ENDLOOP.
 
-      CATCH cx_sy_itab_line_not_found.
+      CATCH cx_sy_itab_line_not_found.                  "#EC NO_HANDLER
     ENDTRY.
   ENDMETHOD.
 
-  METHOD rba_ConfLines.
+  METHOD rba_conflines.
   ENDMETHOD.
 
 ENDCLASS.
 
-CLASS lhc_I_POCONF_ID DEFINITION INHERITING FROM cl_abap_behavior_handler.
+CLASS lhc_i_poconf_id DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
     METHODS create FOR MODIFY
@@ -108,29 +108,23 @@ CLASS lhc_I_POCONF_ID DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS read FOR READ
       IMPORTING keys FOR READ /df5/i_poconf_id RESULT result.
 
-    METHODS cba_Lines FOR MODIFY
-      IMPORTING entities_cba FOR CREATE /df5/i_poconf_id\_Lines.
+    METHODS cba_lines FOR MODIFY
+      IMPORTING entities_cba FOR CREATE /df5/i_poconf_id\_lines.
 
-    METHODS rba_Lines FOR READ
-      IMPORTING keys_rba FOR READ /df5/i_poconf_id\_Lines FULL result_requested RESULT result LINK association_links.
+    METHODS rba_lines FOR READ
+      IMPORTING keys_rba FOR READ /df5/i_poconf_id\_lines FULL result_requested RESULT result LINK association_links.
 
-    METHODS cba_Log FOR MODIFY
-      IMPORTING entities_cba FOR CREATE /df5/i_poconf_id\_Log.
+    METHODS cba_log FOR MODIFY
+      IMPORTING entities_cba FOR CREATE /df5/i_poconf_id\_log.
 
-    METHODS rba_Log FOR READ
-      IMPORTING keys_rba FOR READ /df5/i_poconf_id\_Log FULL result_requested RESULT result LINK association_links.
+    METHODS rba_log FOR READ
+      IMPORTING keys_rba FOR READ /df5/i_poconf_id\_log FULL result_requested RESULT result LINK association_links.
 
 ENDCLASS.
 
-CLASS lhc_I_POCONF_ID IMPLEMENTATION.
+CLASS lhc_i_poconf_id IMPLEMENTATION.
 
   METHOD create.
-
-*   READ TABLE entities INTO DATA(ls_confirmation_header) INDEX 1.
-*    IF ls_confirmation_header IS NOT INITIAL.
-*      MOVE-CORRESPONDING ls_confirmation_header TO lcl_buffer=>ms_buffer-ms_buffer_conf_header.
-*    ENDIF.
-
   ENDMETHOD.
 
   METHOD delete.
@@ -142,29 +136,29 @@ CLASS lhc_I_POCONF_ID IMPLEMENTATION.
   METHOD read.
   ENDMETHOD.
 
-  METHOD cba_Lines.
+  METHOD cba_lines.
     TRY.
         DATA(lt_item) = entities_cba[ 1 ].
         LOOP AT lt_item-%target ASSIGNING FIELD-SYMBOL(<ls_item>).
           APPEND CORRESPONDING #( <ls_item> ) TO lcl_buffer=>ms_buffer-mt_buffer_line_item.
         ENDLOOP.
 
-      CATCH cx_sy_itab_line_not_found.
+      CATCH cx_sy_itab_line_not_found.                  "#EC NO_HANDLER
     ENDTRY.
   ENDMETHOD.
 
-  METHOD rba_Lines.
+  METHOD rba_lines.
   ENDMETHOD.
 
-  METHOD cba_Log.
+  METHOD cba_log.
   ENDMETHOD.
 
-  METHOD rba_Log.
+  METHOD rba_log.
   ENDMETHOD.
 
 ENDCLASS.
 
-CLASS lhc_I_POCONF_LIST DEFINITION INHERITING FROM cl_abap_behavior_handler.
+CLASS lhc_i_poconf_list DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
     METHODS create FOR MODIFY
@@ -181,7 +175,7 @@ CLASS lhc_I_POCONF_LIST DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
 ENDCLASS.
 
-CLASS lhc_I_POCONF_LIST IMPLEMENTATION.
+CLASS lhc_i_poconf_list IMPLEMENTATION.
 
   METHOD create.
   ENDMETHOD.
@@ -197,7 +191,7 @@ CLASS lhc_I_POCONF_LIST IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS lhc_I_POCONF_LOG DEFINITION INHERITING FROM cl_abap_behavior_handler.
+CLASS lhc_i_poconf_log DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
     METHODS create FOR MODIFY
@@ -214,7 +208,7 @@ CLASS lhc_I_POCONF_LOG DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
 ENDCLASS.
 
-CLASS lhc_I_POCONF_LOG IMPLEMENTATION.
+CLASS lhc_i_poconf_log IMPLEMENTATION.
 
   METHOD create.
   ENDMETHOD.
@@ -230,7 +224,7 @@ CLASS lhc_I_POCONF_LOG IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS lsc_I_ACTIONID DEFINITION INHERITING FROM cl_abap_behavior_saver.
+CLASS lsc_i_actionid DEFINITION INHERITING FROM cl_abap_behavior_saver.
   PROTECTED SECTION.
 
     METHODS check_before_save REDEFINITION.
@@ -241,7 +235,7 @@ CLASS lsc_I_ACTIONID DEFINITION INHERITING FROM cl_abap_behavior_saver.
 
 ENDCLASS.
 
-CLASS lsc_I_ACTIONID IMPLEMENTATION.
+CLASS lsc_i_actionid IMPLEMENTATION.
 
   METHOD check_before_save.
   ENDMETHOD.

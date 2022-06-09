@@ -8,14 +8,15 @@ CLASS /df5/cl_poconfirmation DEFINITION
 
     TYPES: gty_t_conf_headers   TYPE STANDARD TABLE OF /df5/i_poconf_id WITH DEFAULT KEY,
            gty_t_contract_items TYPE STANDARD TABLE OF /df5/i_poconf_list WITH DEFAULT KEY,
+           gty_t_bapiret2       TYPE STANDARD TABLE OF bapiret2,
 
            BEGIN OF gty_s_buffer,
              ms_buffer_action      TYPE /df5/i_actionid,
              ms_buffer_conf_header TYPE /df5/i_poconf_id,
              mt_buffer_conf_header TYPE gty_t_conf_headers,
              mt_buffer_line_item   TYPE gty_t_contract_items,
-             mv_guid               TYPE sysuuid_22,
-             mv_user               TYPE uname,
+             mv_guid               TYPE sysuuid_22, "TODO: Not released
+             mv_user               TYPE syuname,
              mv_timestamp          TYPE timestampl,
            END OF gty_s_buffer.
 
@@ -24,8 +25,8 @@ CLASS /df5/cl_poconfirmation DEFINITION
     CLASS-METHODS:
       create_confirmation
         EXPORTING
-          et_return TYPE bapiret2_t
-          ev_succes TYPE boole_d
+          et_return TYPE gty_t_bapiret2
+          ev_succes TYPE abap_boolean
         CHANGING
           cs_buffer TYPE gty_s_buffer,
       get_eket_info FOR TABLE FUNCTION /df5/p_eket_tf.
@@ -34,69 +35,69 @@ CLASS /df5/cl_poconfirmation DEFINITION
     CLASS-METHODS
       me_po_confirm
         IMPORTING
-          it_items          TYPE bapimeconf_t_item
-          it_confirmations  TYPE bapimeconf_t_detail
-          it_confirmationsx TYPE bapimeconf_t_detailx
+          it_items          TYPE bapimeconf_t_item "TODO: Not released
+          it_confirmations  TYPE bapimeconf_t_detail "TODO: Not released
+          it_confirmationsx TYPE bapimeconf_t_detailx "TODO: Not released
           it_poupdates      TYPE gty_t_contract_items
           iv_ebeln          TYPE ebeln
-          iv_updatepo       TYPE abap_bool
+          iv_updatepo       TYPE abap_boolean
         EXPORTING
-          et_return         TYPE bapiret2_t
-          ev_errors         TYPE abap_bool.
+          et_return         TYPE gty_t_bapiret2
+          ev_errors         TYPE abap_boolean.
 
   PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
+CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
 
   METHOD create_confirmation.
     DATA: ls_polist            TYPE /df5/i_poconf_list,
           lt_temppolist        TYPE TABLE OF /df5/i_poconf_list,
-          lv_errors            TYPE abap_bool,
-          lv_purchaseorder     TYPE bapimepoheader-po_number,
-          ls_poheader          TYPE bapimepoheader,
+          lv_errors            TYPE abap_boolean,
+          lv_purchaseorder     TYPE ebeln,
+          ls_poheader          TYPE bapimepoheader, "TODO: Not released
           lv_ebelp             TYPE ebelp,
-          lv_changePO          TYPE abap_bool,
-          ls_poheaderx         TYPE bapimepoheaderx,
-          ls_bapimeconfitem    TYPE bapimeconfitem,
-          ls_bapimeconfitemx   TYPE bapimeconfitemx,
-          lt_bapimeconfitemx   TYPE TABLE OF bapimeconfitemx,
-          lt_bapimeconfitem    TYPE TABLE OF bapimeconfitem,
-          ls_bapimeconfdetail  TYPE bapimeconfdetail,
-          lt_bapimeconfdetail  TYPE TABLE OF bapimeconfdetail,
-          lt_bapimeconfdetailx TYPE TABLE OF bapimeconfdetailx,
-          ls_bapimeconfdetailx TYPE bapimeconfdetailx,
+          lv_changepo          TYPE abap_boolean,
+          ls_poheaderx         TYPE bapimepoheaderx, "TODO: Not released
+          ls_bapimeconfitem    TYPE bapimeconfitem, "TODO: Not released
+          ls_bapimeconfitemx   TYPE bapimeconfitemx, "TODO: Not released
+          lt_bapimeconfitemx   TYPE TABLE OF bapimeconfitemx, "TODO: Not released
+          lt_bapimeconfitem    TYPE TABLE OF bapimeconfitem, "TODO: Not released
+          ls_bapimeconfdetail  TYPE bapimeconfdetail, "TODO: Not released
+          lt_bapimeconfdetail  TYPE TABLE OF bapimeconfdetail, "TODO: Not released
+          lt_bapimeconfdetailx TYPE TABLE OF bapimeconfdetailx, "TODO: Not released
+          ls_bapimeconfdetailx TYPE bapimeconfdetailx, "TODO: Not released
           lt_return            TYPE TABLE OF bapiret2,
           ls_return            TYPE bapiret2,
-          lv_bapi_error        TYPE abap_bool,
+          lv_bapi_error        TYPE abap_boolean,
           ls_confirmation      TYPE /df5/db_pcid,
           lt_log               TYPE TABLE OF /df5/db_poco,
           ls_action            TYPE /df5/db_acid.
 
 *    lv_errors = abap_false. "Default is abap_false
-    LOOP AT cs_buffer-mt_buffer_line_item INTO ls_polist GROUP BY ls_polist-PurchaseOrder.
+    LOOP AT cs_buffer-mt_buffer_line_item INTO ls_polist GROUP BY ls_polist-purchaseorder.
       LOOP AT GROUP ls_polist INTO DATA(ls_line).
-        IF lv_ebelp <> ls_line-PurchaseOrderLine.
-          ls_bapimeconfitem-item_no = ls_line-PurchaseOrderLine.
-          lv_ebelp = ls_line-PurchaseOrderLine.
+        IF lv_ebelp <> ls_line-purchaseorderline.
+          ls_bapimeconfitem-item_no = ls_line-purchaseorderline.
+          lv_ebelp = ls_line-purchaseorderline.
           APPEND ls_bapimeconfitem TO lt_bapimeconfitem.
         ENDIF.
 
-        ls_bapimeconfdetail-item_no         = ls_line-PurchaseOrderLine.
-        ls_bapimeconfdetail-conf_ser        = ls_line-SupplierConfirmation.
+        ls_bapimeconfdetail-item_no         = ls_line-purchaseorderline.
+        ls_bapimeconfdetail-conf_ser        = ls_line-supplierconfirmation.
         ls_bapimeconfdetail-conf_category   = 'AB'.
         ls_bapimeconfdetail-deliv_date_typ  = '1'.
-        ls_bapimeconfdetail-deliv_date      = ls_line-ConfirmedDelDate.
-        ls_bapimeconfdetail-quantity        = ls_line-Quantity.
-        ls_bapimeconfdetail-reference       = ls_line-Reference.
+        ls_bapimeconfdetail-deliv_date      = ls_line-confirmeddeldate.
+        ls_bapimeconfdetail-quantity        = ls_line-quantity.
+        ls_bapimeconfdetail-reference       = ls_line-reference.
         ls_bapimeconfdetail-creat_date      = sy-datlo.
         ls_bapimeconfdetail-creat_time      = sy-timlo.
-        ls_bapimeconfdetail-mpn             = ls_line-Material.
-        ls_bapimeconfdetailx-item_no        = ls_line-PurchaseOrderLine.
-        ls_bapimeconfdetailx-conf_ser       = ls_line-SupplierConfirmation.
+        ls_bapimeconfdetail-mpn             = ls_line-material.
+        ls_bapimeconfdetailx-item_no        = ls_line-purchaseorderline.
+        ls_bapimeconfdetailx-conf_ser       = ls_line-supplierconfirmation.
         ls_bapimeconfdetailx-item_nox       = 'X'.
         ls_bapimeconfdetailx-conf_serx      = 'X'.
         ls_bapimeconfdetailx-conf_category  = 'X'.
@@ -108,7 +109,7 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
         ls_bapimeconfdetailx-creat_time     = 'X'.
         ls_bapimeconfdetailx-reference      = 'X'.
 
-        IF ls_line-Changed = 'X'.
+        IF ls_line-changed = 'X'.
           lv_changepo = abap_true.
           APPEND CORRESPONDING #( ls_line ) TO lt_temppolist.
         ENDIF.
@@ -117,7 +118,7 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
         APPEND ls_bapimeconfdetailx TO lt_bapimeconfdetailx.
       ENDLOOP.
 
-      lv_purchaseorder = ls_polist-PurchaseOrder.
+      lv_purchaseorder = ls_polist-purchaseorder.
       me_po_confirm(
         EXPORTING
           it_items          = lt_bapimeconfitem
@@ -125,7 +126,7 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
           it_confirmationsx = lt_bapimeconfdetailx
           it_poupdates      = lt_temppolist
           iv_ebeln          = lv_purchaseorder
-          iv_updatepo       = lv_changePO
+          iv_updatepo       = lv_changepo
         IMPORTING
           et_return         = lt_return
           ev_errors         = lv_bapi_error ##COMPATIBLE
@@ -202,19 +203,19 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
 
 
     RETURN
-      SELECT mandt, ebeln AS purchaseOrder, ebelp AS purchaseOrderLine, MIN(eindt) AS date
+      SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MIN(eindt) AS date
         FROM eket
         WHERE eindt >= to_dats(current_date)
         GROUP BY mandt, ebeln, ebelp
       UNION
-      SELECT mandt, ebeln AS purchaseOrder, ebelp AS purchaseOrderLine, MAX(eindt) AS date
+      SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MAX(eindt) AS date
         FROM (
           select mandt, ebeln, ebelp, eindt, menge
             FROM eket AS eket1
             WHERE eindt < to_dats(current_date)
         ) AS ekettemp
         WHERE NOT EXISTS (
-          SELECT mandt, ebeln AS purchaseOrder, ebelp AS purchaseOrderLine, MIN(eindt) AS date
+          SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MIN(eindt) AS date
             FROM eket
             WHERE eindt >= to_dats(current_date)
               AND ekettemp.ebeln = eket.ebeln
@@ -227,19 +228,19 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
 
 
   METHOD me_po_confirm.
-    DATA: lv_errors        TYPE abap_bool,
-          lv_purchaseorder TYPE bapimepoheader-po_number,
-          ls_poheader      TYPE bapimepoheader,
-          ls_poheaderx     TYPE bapimepoheaderx,
+    DATA: lv_errors        TYPE abap_boolean,
+          lv_purchaseorder TYPE ebeln,
+          ls_poheader      TYPE bapimepoheader, "TODO: Not released
+          ls_poheaderx     TYPE bapimepoheaderx, "TODO: Not released
           lt_return_change TYPE STANDARD TABLE OF bapiret2,
-          ls_poitem        TYPE bapimepoitem,
-          lt_poitem        TYPE STANDARD TABLE OF bapimepoitem,
-          ls_poitemx       TYPE bapimepoitemx,
-          lt_poitemx       TYPE STANDARD TABLE OF bapimepoitemx,
-          ls_poschedule    TYPE bapimeposchedule,
-          lt_poschedule    TYPE STANDARD TABLE OF bapimeposchedule,
-          ls_poschedulex   TYPE bapimeposchedulx,
-          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx.
+          ls_poitem        TYPE bapimepoitem, "TODO: Not released
+          lt_poitem        TYPE STANDARD TABLE OF bapimepoitem, "TODO: Not released
+          ls_poitemx       TYPE bapimepoitemx, "TODO: Not released
+          lt_poitemx       TYPE STANDARD TABLE OF bapimepoitemx, "TODO: Not released
+          ls_poschedule    TYPE bapimeposchedule, "TODO: Not released
+          lt_poschedule    TYPE STANDARD TABLE OF bapimeposchedule, "TODO: Not released
+          ls_poschedulex   TYPE bapimeposchedulx, "TODO: Not released
+          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx. "TODO: Not released
 
 *    lv_errors = abap_false. "Default is abap_false
 
@@ -264,7 +265,7 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
       lv_errors = abap_true.
     ENDIF.
 
-    IF iv_updatepo EQ abap_true.
+    IF iv_updatepo = abap_true.
       LOOP AT it_poupdates INTO DATA(ls_lines).
         ls_poitem-po_item  = ls_lines-purchaseorderline.
         ls_poitem-stge_loc = ls_lines-storagelocation.

@@ -1,7 +1,7 @@
 CLASS /df5/cl_poconfirmation DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES if_amdp_marker_hdb.
@@ -20,7 +20,7 @@ CLASS /df5/cl_poconfirmation DEFINITION
              mv_timestamp          TYPE timestampl,
            END OF gty_s_buffer.
 
-    CLASS-DATA: ms_buffer TYPE gty_s_buffer.
+    CLASS-DATA ms_buffer TYPE gty_s_buffer.
 
     CLASS-METHODS:
       create_confirmation
@@ -50,7 +50,7 @@ ENDCLASS.
 
 
 
-CLASS /df5/cl_poconfirmation IMPLEMENTATION.
+CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
 
 
   METHOD create_confirmation.
@@ -129,8 +129,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
           iv_updatepo       = lv_changepo
         IMPORTING
           et_return         = lt_return
-          ev_errors         = lv_bapi_error ##COMPATIBLE
-      ).
+          ev_errors         = lv_bapi_error ).##COMPATIBLE
 
       IF lv_bapi_error = abap_true.
         lv_errors = lv_bapi_error.
@@ -150,7 +149,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
       ls_confirmation-purchaseorder = lv_purchaseorder.
       ls_confirmation-created_on = cs_buffer-mv_timestamp.
       ls_confirmation-created_by = sy-uname.
-      INSERT /df5/db_pcid FROM ls_confirmation.     "#EC CI_IMUD_NESTED
+      INSERT /df5/db_pcid FROM @ls_confirmation.     "#EC CI_IMUD_NESTED
 
       FREE lt_log.
 
@@ -176,7 +175,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
         <ls_log>-ztype = <ls_return>-type.
       ENDLOOP.
 
-      INSERT /df5/db_poco FROM TABLE lt_log.        "#EC CI_IMUD_NESTED
+      INSERT /df5/db_poco FROM TABLE @lt_log.        "#EC CI_IMUD_NESTED
     ENDLOOP.
 
     IF lv_errors EQ abap_false.
@@ -203,26 +202,26 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
 
     RETURN
-      SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MIN(eindt) AS date
-        FROM eket
-        WHERE eindt >= to_dats(current_date)
-        GROUP BY mandt, ebeln, ebelp
+      SELECT MANDT, EBELN AS PURCHASEORDER, EBELP AS PURCHASEORDERLINE, MIN(EINDT) AS DATE
+        FROM EKET
+        WHERE EINDT >= TO_DATS(CURRENT_DATE)
+        GROUP BY MANDT, EBELN, EBELP
       UNION
-      SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MAX(eindt) AS date
+      SELECT MANDT, EBELN AS PURCHASEORDER, EBELP AS PURCHASEORDERLINE, MAX(EINDT) AS DATE
         FROM (
-          select mandt, ebeln, ebelp, eindt, menge
-            FROM eket AS eket1
-            WHERE eindt < to_dats(current_date)
-        ) AS ekettemp
+          SELECT MANDT, EBELN, EBELP, EINDT, MENGE
+            FROM EKET AS EKET1
+            WHERE EINDT < TO_DATS(CURRENT_DATE)
+        ) AS EKETTEMP
         WHERE NOT EXISTS (
-          SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MIN(eindt) AS date
-            FROM eket
-            WHERE eindt >= to_dats(current_date)
-              AND ekettemp.ebeln = eket.ebeln
-              and ekettemp.ebelp = eket.ebelp
-            group by mandt, ebeln, ebelp
-        )
-        GROUP BY mandt, ebeln, ebelp;
+          SELECT MANDT, EBELN AS PURCHASEORDER, EBELP AS PURCHASEORDERLINE, MIN(EINDT) AS DATE
+            FROM EKET
+            WHERE EINDT >= TO_DATS(CURRENT_DATE)
+               AND EKETTEMP.EBELN = EKET.EBELN
+                                           AND EKETTEMP.EBELP = EKET.EBELP
+                                                                       GROUP BY MANDT, EBELN, EBELP
+                                                                       )
+                                                                       GROUP BY MANDT, EBELN, EBELP;
 
   ENDMETHOD.
 
@@ -254,11 +253,9 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
         return        = et_return.
 
     IF sy-subrc = 0.
-      LOOP AT et_return ASSIGNING FIELD-SYMBOL(<lfs_return>).
-        IF <lfs_return>-type = 'E' OR <lfs_return>-type = 'A'.
+      LOOP AT et_return ASSIGNING FIELD-SYMBOL(<ls_return>).
+        IF <ls_return>-type = 'E' OR <ls_return>-type = 'A'.
           lv_errors = abap_true.
-          "CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'.
-          "EXIT.
         ENDIF.
       ENDLOOP.
     ELSE.
@@ -289,9 +286,9 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
           poitemx       = lt_poitemx.
 
       IF sy-subrc = 0.
-        LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<lfs_return2>).
-          APPEND <lfs_return2> TO et_return.
-          IF <lfs_return2>-type = 'E' OR <lfs_return2>-type = 'A'.
+        LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<ls_return2>).
+          APPEND <ls_return2> TO et_return.
+          IF <ls_return2>-type = 'E' OR <ls_return2>-type = 'A'.
             lv_errors = abap_true.
           ENDIF.
         ENDLOOP.

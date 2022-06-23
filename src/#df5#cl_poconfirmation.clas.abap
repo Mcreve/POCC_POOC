@@ -4,8 +4,8 @@ CLASS /df5/cl_poconfirmation DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    TYPES: gty_t_conf_headers   TYPE STANDARD TABLE OF /df5/i_poconf_id WITH DEFAULT KEY,
-           gty_t_contract_items TYPE STANDARD TABLE OF /df5/i_poconf_list WITH DEFAULT KEY,
+    TYPES: gty_t_conf_headers   TYPE STANDARD TABLE OF /df5/i_poconf_id WITH EMPTY KEY,
+           gty_t_contract_items TYPE STANDARD TABLE OF /df5/i_poconf_list WITH EMPTY KEY,
            gty_t_bapiret2       TYPE STANDARD TABLE OF bapiret2,
 
            BEGIN OF gty_s_buffer,
@@ -22,9 +22,6 @@ CLASS /df5/cl_poconfirmation DEFINITION
 
     CLASS-METHODS:
       create_confirmation
-        EXPORTING
-          et_return TYPE gty_t_bapiret2
-          ev_succes TYPE abap_boolean
         CHANGING
           cs_buffer TYPE gty_s_buffer.
 
@@ -52,7 +49,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
   METHOD create_confirmation.
     DATA: ls_polist            TYPE /df5/i_poconf_list,
-          lt_temppolist        TYPE TABLE OF /df5/i_poconf_list,
+          lt_temppolist        TYPE STANDARD TABLE OF /df5/i_poconf_list WITH EMPTY KEY,
           lv_errors            TYPE abap_boolean,
           lv_purchaseorder     TYPE ebeln,
           ls_poheader          TYPE bapimepoheader, "TODO: Not released

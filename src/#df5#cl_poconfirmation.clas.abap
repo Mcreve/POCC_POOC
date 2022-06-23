@@ -4,8 +4,6 @@ CLASS /df5/cl_poconfirmation DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    INTERFACES if_amdp_marker_hdb.
-
     TYPES: gty_t_conf_headers   TYPE STANDARD TABLE OF /df5/i_poconf_id WITH DEFAULT KEY,
            gty_t_contract_items TYPE STANDARD TABLE OF /df5/i_poconf_list WITH DEFAULT KEY,
            gty_t_bapiret2       TYPE STANDARD TABLE OF bapiret2,
@@ -28,8 +26,7 @@ CLASS /df5/cl_poconfirmation DEFINITION
           et_return TYPE gty_t_bapiret2
           ev_succes TYPE abap_boolean
         CHANGING
-          cs_buffer TYPE gty_s_buffer,
-      get_eket_info FOR TABLE FUNCTION /df5/p_eket_tf.
+          cs_buffer TYPE gty_s_buffer.
 
   PROTECTED SECTION.
     CLASS-METHODS
@@ -50,7 +47,7 @@ ENDCLASS.
 
 
 
-CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
+CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
 
   METHOD create_confirmation.
@@ -149,33 +146,37 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
       ls_confirmation-purchaseorder = lv_purchaseorder.
       ls_confirmation-created_on = cs_buffer-mv_timestamp.
       ls_confirmation-created_by = sy-uname.
-      INSERT /df5/db_pcid FROM @ls_confirmation.     "#EC CI_IMUD_NESTED
 
-      FREE lt_log.
+      INSERT /df5/db_pcid FROM @ls_confirmation.    "#EC CI_IMUD_NESTED
+      IF sy-subrc = 0.
 
-      DELETE ADJACENT DUPLICATES FROM lt_return.
-      LOOP AT lt_return ASSIGNING FIELD-SYMBOL(<ls_return>).
-        APPEND INITIAL LINE TO lt_log ASSIGNING FIELD-SYMBOL(<ls_log>).
-        <ls_log>-zactionid = cs_buffer-mv_guid.
-        <ls_log>-purchaseorder = lv_purchaseorder.
-        <ls_log>-zfield = <ls_return>-field.
-        <ls_log>-zlogid = <ls_return>-id.
-        <ls_log>-zlog_msg_no = sy-tabix."<ls_return>-log_msg_no.
-        <ls_log>-zlog_no = <ls_return>-log_no.
-        <ls_log>-zmessage = <ls_return>-message.
-        <ls_log>-zmessage_v1 = <ls_return>-message_v1.
-        <ls_log>-zmessage_v2 = <ls_return>-message_v2.
-        <ls_log>-zmessage_v2 = <ls_return>-message_v2.
-        <ls_log>-zmessage_v3 = <ls_return>-message_v3.
-        <ls_log>-zmessage_v4 = <ls_return>-message_v4.
-        <ls_log>-znumber = <ls_return>-number.
-        <ls_log>-zparameter = <ls_return>-parameter.
-        <ls_log>-zrow = <ls_return>-row.
-        <ls_log>-zsystem = <ls_return>-system.
-        <ls_log>-ztype = <ls_return>-type.
-      ENDLOOP.
+        FREE lt_log.
 
-      INSERT /df5/db_poco FROM TABLE @lt_log.        "#EC CI_IMUD_NESTED
+        DELETE ADJACENT DUPLICATES FROM lt_return.
+        LOOP AT lt_return ASSIGNING FIELD-SYMBOL(<ls_return>).
+          APPEND INITIAL LINE TO lt_log ASSIGNING FIELD-SYMBOL(<ls_log>).
+          <ls_log>-zactionid = cs_buffer-mv_guid.
+          <ls_log>-purchaseorder = lv_purchaseorder.
+          <ls_log>-zfield = <ls_return>-field.
+          <ls_log>-zlogid = <ls_return>-id.
+          <ls_log>-zlog_msg_no = sy-tabix."<ls_return>-log_msg_no.
+          <ls_log>-zlog_no = <ls_return>-log_no.
+          <ls_log>-zmessage = <ls_return>-message.
+          <ls_log>-zmessage_v1 = <ls_return>-message_v1.
+          <ls_log>-zmessage_v2 = <ls_return>-message_v2.
+          <ls_log>-zmessage_v2 = <ls_return>-message_v2.
+          <ls_log>-zmessage_v3 = <ls_return>-message_v3.
+          <ls_log>-zmessage_v4 = <ls_return>-message_v4.
+          <ls_log>-znumber = <ls_return>-number.
+          <ls_log>-zparameter = <ls_return>-parameter.
+          <ls_log>-zrow = <ls_return>-row.
+          <ls_log>-zsystem = <ls_return>-system.
+          <ls_log>-ztype = <ls_return>-type.
+        ENDLOOP.
+
+        INSERT /df5/db_poco FROM TABLE @lt_log. "#EC CI_IMUD_NESTED "#EC CI_SUBRC
+      ENDIF.
+
     ENDLOOP.
 
     IF lv_errors EQ abap_false.
@@ -190,39 +191,7 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
     ls_action-created_on = lv_tsl2.
     ls_action-created_by = sy-uname.
 
-    INSERT /df5/db_acid FROM ls_action.             "#EC CI_IMUD_NESTED
-  ENDMETHOD.
-
-
-  METHOD get_eket_info BY DATABASE FUNCTION
-          FOR HDB
-          LANGUAGE SQLSCRIPT
-          OPTIONS READ-ONLY
-          USING eket.
-
-
-    RETURN
-      SELECT MANDT, EBELN AS PURCHASEORDER, EBELP AS PURCHASEORDERLINE, MIN(EINDT) AS DATE
-        FROM EKET
-        WHERE EINDT >= TO_DATS(CURRENT_DATE)
-        GROUP BY MANDT, EBELN, EBELP
-      UNION
-      SELECT MANDT, EBELN AS PURCHASEORDER, EBELP AS PURCHASEORDERLINE, MAX(EINDT) AS DATE
-        FROM (
-          SELECT MANDT, EBELN, EBELP, EINDT, MENGE
-            FROM EKET AS EKET1
-            WHERE EINDT < TO_DATS(CURRENT_DATE)
-        ) AS EKETTEMP
-        WHERE NOT EXISTS (
-          SELECT MANDT, EBELN AS PURCHASEORDER, EBELP AS PURCHASEORDERLINE, MIN(EINDT) AS DATE
-            FROM EKET
-            WHERE EINDT >= TO_DATS(CURRENT_DATE)
-               AND EKETTEMP.EBELN = EKET.EBELN
-                                           AND EKETTEMP.EBELP = EKET.EBELP
-                                                                       GROUP BY MANDT, EBELN, EBELP
-                                                                       )
-                                                                       GROUP BY MANDT, EBELN, EBELP;
-
+    INSERT /df5/db_acid FROM ls_action. "#EC CI_IMUD_NESTED "#EC CI_SUBRC
   ENDMETHOD.
 
 

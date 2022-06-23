@@ -49,6 +49,8 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
   METHOD create_confirmation.
     DATA:
+      ls_polist            TYPE /df5/i_poconf_list,
+      ls_line              TYPE /df5/i_poconf_list,
       lt_temppolist        TYPE STANDARD TABLE OF /df5/i_poconf_list WITH EMPTY KEY,
       lv_purchaseorder     TYPE ebeln,
       ls_poheader          TYPE bapimepoheader, "TODO: Not released
@@ -66,14 +68,13 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
       lt_return            TYPE TABLE OF bapiret2,
       ls_return            TYPE bapiret2,
       lv_bapi_error        TYPE abap_boolean,
+      lt_confirmation      TYPE STANDARD TABLE OF /df5/db_pcid WITH EMPTY KEY,
       ls_confirmation      TYPE /df5/db_pcid,
       lt_log               TYPE TABLE OF /df5/db_poco,
       ls_action            TYPE /df5/db_acid.
 
 *    lv_errors = abap_false. "Default is abap_false
-    LOOP AT cs_buffer-mt_buffer_line_item INTO DATA(ls_polist) GROUP BY ls_polist-purchaseorder.
-      DATA ls_line LIKE ls_polist.
-
+    LOOP AT cs_buffer-mt_buffer_line_item INTO ls_polist GROUP BY ls_polist-purchaseorder.
       LOOP AT GROUP ls_polist INTO ls_line.
         IF lv_ebelp <> ls_line-purchaseorderline.
           ls_bapimeconfitem-item_no = ls_line-purchaseorderline.
@@ -142,37 +143,34 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
       ls_confirmation-created_on = cs_buffer-mv_timestamp.
       ls_confirmation-created_by = sy-uname.
 
-      INSERT /df5/db_pcid FROM @ls_confirmation.    "#EC CI_IMUD_NESTED
-      IF sy-subrc = 0.
+      APPEND ls_confirmation TO lt_confirmation.
 
-        FREE lt_log.
-
-        DELETE ADJACENT DUPLICATES FROM lt_return.
-        LOOP AT lt_return ASSIGNING FIELD-SYMBOL(<ls_return>).
-          APPEND INITIAL LINE TO lt_log ASSIGNING FIELD-SYMBOL(<ls_log>).
-          <ls_log>-zactionid = cs_buffer-mv_guid.
-          <ls_log>-purchaseorder = lv_purchaseorder.
-          <ls_log>-zfield = <ls_return>-field.
-          <ls_log>-zlogid = <ls_return>-id.
-          <ls_log>-zlog_msg_no = sy-tabix."<ls_return>-log_msg_no.
-          <ls_log>-zlog_no = <ls_return>-log_no.
-          <ls_log>-zmessage = <ls_return>-message.
-          <ls_log>-zmessage_v1 = <ls_return>-message_v1.
-          <ls_log>-zmessage_v2 = <ls_return>-message_v2.
-          <ls_log>-zmessage_v2 = <ls_return>-message_v2.
-          <ls_log>-zmessage_v3 = <ls_return>-message_v3.
-          <ls_log>-zmessage_v4 = <ls_return>-message_v4.
-          <ls_log>-znumber = <ls_return>-number.
-          <ls_log>-zparameter = <ls_return>-parameter.
-          <ls_log>-zrow = <ls_return>-row.
-          <ls_log>-zsystem = <ls_return>-system.
-          <ls_log>-ztype = <ls_return>-type.
-        ENDLOOP.
-
-        INSERT /df5/db_poco FROM TABLE @lt_log. "#EC CI_IMUD_NESTED "#EC CI_SUBRC
-      ENDIF.
+      DELETE ADJACENT DUPLICATES FROM lt_return.
+      LOOP AT lt_return ASSIGNING FIELD-SYMBOL(<ls_return>).
+        APPEND INITIAL LINE TO lt_log ASSIGNING FIELD-SYMBOL(<ls_log>).
+        <ls_log>-zactionid = cs_buffer-mv_guid.
+        <ls_log>-purchaseorder = lv_purchaseorder.
+        <ls_log>-zfield = <ls_return>-field.
+        <ls_log>-zlogid = <ls_return>-id.
+        <ls_log>-zlog_msg_no = sy-tabix."<ls_return>-log_msg_no.
+        <ls_log>-zlog_no = <ls_return>-log_no.
+        <ls_log>-zmessage = <ls_return>-message.
+        <ls_log>-zmessage_v1 = <ls_return>-message_v1.
+        <ls_log>-zmessage_v2 = <ls_return>-message_v2.
+        <ls_log>-zmessage_v2 = <ls_return>-message_v2.
+        <ls_log>-zmessage_v3 = <ls_return>-message_v3.
+        <ls_log>-zmessage_v4 = <ls_return>-message_v4.
+        <ls_log>-znumber = <ls_return>-number.
+        <ls_log>-zparameter = <ls_return>-parameter.
+        <ls_log>-zrow = <ls_return>-row.
+        <ls_log>-zsystem = <ls_return>-system.
+        <ls_log>-ztype = <ls_return>-type.
+      ENDLOOP.
 
     ENDLOOP.
+
+    INSERT /df5/db_pcid FROM TABLE @lt_confirmation.      "#EC CI_SUBRC
+    INSERT /df5/db_poco FROM TABLE @lt_log.               "#EC CI_SUBRC
 
     IF lv_bapi_error = abap_false.
       " if no error fill the return

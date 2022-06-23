@@ -49,7 +49,6 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
   METHOD create_confirmation.
     DATA:
-      ls_polist            TYPE /df5/i_poconf_list,
       lt_temppolist        TYPE STANDARD TABLE OF /df5/i_poconf_list WITH EMPTY KEY,
       lv_purchaseorder     TYPE ebeln,
       ls_poheader          TYPE bapimepoheader, "TODO: Not released
@@ -72,8 +71,10 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
       ls_action            TYPE /df5/db_acid.
 
 *    lv_errors = abap_false. "Default is abap_false
-    LOOP AT cs_buffer-mt_buffer_line_item INTO ls_polist GROUP BY ls_polist-purchaseorder.
-      LOOP AT GROUP ls_polist INTO DATA(ls_line).
+    LOOP AT cs_buffer-mt_buffer_line_item INTO DATA(ls_polist) GROUP BY ls_polist-purchaseorder.
+      DATA ls_line LIKE ls_polist.
+
+      LOOP AT GROUP ls_polist INTO ls_line.
         IF lv_ebelp <> ls_line-purchaseorderline.
           ls_bapimeconfitem-item_no = ls_line-purchaseorderline.
           lv_ebelp = ls_line-purchaseorderline.
@@ -215,7 +216,8 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
           ls_poschedule    TYPE bapimeposchedule, "TODO: Not released
           lt_poschedule    TYPE STANDARD TABLE OF bapimeposchedule, "TODO: Not released
           ls_poschedulex   TYPE bapimeposchedulx, "TODO: Not released
-          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx. "TODO: Not released
+          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx, "TODO: Not released
+          ls_lines         TYPE /df5/i_poconf_list.
 
 *    lv_errors = abap_false. "Default is abap_false
 
@@ -245,7 +247,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
     ENDIF.
 
     IF iv_updatepo = abap_true.
-      LOOP AT it_poupdates INTO DATA(ls_lines).
+      LOOP AT it_poupdates INTO ls_lines.
         ls_poitem-po_item = ls_lines-purchaseorderline.
         ls_poitem-stge_loc = ls_lines-storagelocation.
         ls_poitem-net_price = ls_lines-netprice.

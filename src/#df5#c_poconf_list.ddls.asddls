@@ -7,7 +7,7 @@ define view entity /DF5/C_POCONF_LIST
       @EndUserText.label: 'Purchase order'
   key PurchaseOrder,
   key PurchaseOrderLine,
-      @EndUserText.label: 'Conf. N°'
+      @EndUserText.label: 'Conf. Nr'
   key SupplierConfirmation,
       Plant,
       StorageLocation,

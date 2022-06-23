@@ -280,10 +280,7 @@ CLASS lsc_i_actionid IMPLEMENTATION.
   METHOD save.
     DATA(ls_buffer) = lcl_buffer=>get_buffer( ).
 
-    /df5/cl_poconfirmation=>create_confirmation(
-      CHANGING
-        cs_buffer = ls_buffer
-    ).
+    /df5/cl_poconfirmation=>create_confirmation( CHANGING cs_buffer = ls_buffer ).
   ENDMETHOD.
 
 ENDCLASS.

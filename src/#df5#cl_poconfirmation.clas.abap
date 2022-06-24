@@ -202,8 +202,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
 
   METHOD me_po_confirm.
-    DATA: lv_errors        TYPE abap_boolean,
-          lv_purchaseorder TYPE ebeln,
+    DATA: lv_purchaseorder TYPE ebeln,
           ls_poheader      TYPE bapimepoheader, "TODO: Not released
           ls_poheaderx     TYPE bapimepoheaderx, "TODO: Not released
           lt_return_change TYPE STANDARD TABLE OF bapiret2,
@@ -217,31 +216,25 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
           lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx, "TODO: Not released
           ls_lines         TYPE /df5/i_poconf_list.
 
-*    lv_errors = abap_false. "Default is abap_false
-
-    CALL FUNCTION 'ME_PO_CONFIRM'
-      DESTINATION 'NONE'
+    /df5/cl_me_po_confirm=>me_po_confirm(
       EXPORTING
-        document_no           = iv_ebeln
-        item                  = it_items
-        confirmation          = it_confirmations
-        confirmationx         = it_confirmationsx
+        iv_destination      = 'NONE'
+        iv_document_no      = iv_ebeln
+        it_item             = it_items
+        it_confirmation     = it_confirmations
+        it_confirmationx    = it_confirmationsx
       IMPORTING
-        return                = et_return
-      EXCEPTIONS
-        system_failure        = 1
-        communication_failure = 2
-        resource_failure      = 3
-        OTHERS                = 4.
+        et_return           = et_return
+    ).
 
     IF sy-subrc = 0.
       LOOP AT et_return ASSIGNING FIELD-SYMBOL(<ls_return>).
         IF <ls_return>-type = 'E' OR <ls_return>-type = 'A'.
-          lv_errors = abap_true.
+          ev_errors = abap_true.
         ENDIF.
       ENDLOOP.
     ELSE.
-      lv_errors = abap_true.
+      ev_errors = abap_true.
     ENDIF.
 
     IF iv_updatepo = abap_true.
@@ -257,36 +250,29 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
         lt_poitemx = VALUE #( BASE lt_poitemx ( ls_poitemx ) ).
       ENDLOOP.
 
-      CALL FUNCTION 'BAPI_PO_CHANGE'
-        DESTINATION 'NONE'
+      /df5/cl_bapi_po_change=>bapi_po_change(
         EXPORTING
-          purchaseorder         = iv_ebeln
-          poheader              = ls_poheader
-          poheaderx             = ls_poheaderx
-        TABLES
-          return                = lt_return_change
-          poitem                = lt_poitem
-          poitemx               = lt_poitemx
-        EXCEPTIONS
-          system_failure        = 1
-          communication_failure = 2
-          resource_failure      = 3
-          OTHERS                = 4.
+          iv_destination            = 'NONE'
+          iv_purchaseorder          = iv_ebeln
+          is_poheader               = ls_poheader
+          is_poheaderx              = ls_poheaderx
+        CHANGING
+          ct_return                 = lt_return_change
+          ct_poitem                 = lt_poitem
+          ct_poitemx                = lt_poitemx
+      ).
 
       IF sy-subrc = 0.
         LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<ls_return2>).
           APPEND <ls_return2> TO et_return.
           IF <ls_return2>-type = 'E' OR <ls_return2>-type = 'A'.
-            lv_errors = abap_true.
+            ev_errors = abap_true.
           ENDIF.
         ENDLOOP.
-
       ELSE.
-        lv_errors = abap_true.
+        ev_errors = abap_true.
       ENDIF.
 
     ENDIF.
-
-    ev_errors = lv_errors.
   ENDMETHOD.
 ENDCLASS.

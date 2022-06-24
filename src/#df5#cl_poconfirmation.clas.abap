@@ -18,9 +18,9 @@ CLASS /df5/cl_poconfirmation DEFINITION
         mv_timestamp          TYPE timestampl,
       END OF gty_s_buffer.
 
-    "! Create PO confirmation
-    "! @parameter cs_buffer | PO items to be saved
     CLASS-METHODS
+      "! Create PO confirmation
+      "! @parameter cs_buffer | PO items to be saved
       create_confirmation
         CHANGING
           cs_buffer TYPE gty_s_buffer.

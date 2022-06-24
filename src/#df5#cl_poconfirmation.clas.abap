@@ -1,35 +1,29 @@
 CLASS /df5/cl_poconfirmation DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
-    INTERFACES if_amdp_marker_hdb.
+    TYPES:
+      gty_t_conf_headers   TYPE STANDARD TABLE OF /df5/i_poconf_id WITH EMPTY KEY,
+      gty_t_contract_items TYPE STANDARD TABLE OF /df5/i_poconf_list WITH EMPTY KEY,
+      gty_t_bapiret2       TYPE STANDARD TABLE OF bapiret2,
+      BEGIN OF gty_s_buffer,
+        ms_buffer_action      TYPE /df5/i_actionid,
+        ms_buffer_conf_header TYPE /df5/i_poconf_id,
+        mt_buffer_conf_header TYPE gty_t_conf_headers,
+        mt_buffer_line_item   TYPE gty_t_contract_items,
+        mv_guid               TYPE sysuuid_c22,
+        mv_user               TYPE syuname,
+        mv_timestamp          TYPE timestampl,
+      END OF gty_s_buffer.
 
-    TYPES: gty_t_conf_headers   TYPE STANDARD TABLE OF /df5/i_poconf_id WITH DEFAULT KEY,
-           gty_t_contract_items TYPE STANDARD TABLE OF /df5/i_poconf_list WITH DEFAULT KEY,
-           gty_t_bapiret2       TYPE STANDARD TABLE OF bapiret2,
-
-           BEGIN OF gty_s_buffer,
-             ms_buffer_action      TYPE /df5/i_actionid,
-             ms_buffer_conf_header TYPE /df5/i_poconf_id,
-             mt_buffer_conf_header TYPE gty_t_conf_headers,
-             mt_buffer_line_item   TYPE gty_t_contract_items,
-             mv_guid               TYPE sysuuid_22, "TODO: Not released
-             mv_user               TYPE syuname,
-             mv_timestamp          TYPE timestampl,
-           END OF gty_s_buffer.
-
-    CLASS-DATA: ms_buffer TYPE gty_s_buffer.
-
-    CLASS-METHODS:
+    CLASS-METHODS
+      "! Create PO confirmation
+      "! @parameter cs_buffer | PO items to be saved
       create_confirmation
-        EXPORTING
-          et_return TYPE gty_t_bapiret2
-          ev_succes TYPE abap_boolean
         CHANGING
-          cs_buffer TYPE gty_s_buffer,
-      get_eket_info FOR TABLE FUNCTION /df5/p_eket_tf.
+          cs_buffer TYPE gty_s_buffer.
 
   PROTECTED SECTION.
     CLASS-METHODS
@@ -54,32 +48,34 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
 
   METHOD create_confirmation.
-    DATA: ls_polist            TYPE /df5/i_poconf_list,
-          lt_temppolist        TYPE TABLE OF /df5/i_poconf_list,
-          lv_errors            TYPE abap_boolean,
-          lv_purchaseorder     TYPE ebeln,
-          ls_poheader          TYPE bapimepoheader, "TODO: Not released
-          lv_ebelp             TYPE ebelp,
-          lv_changepo          TYPE abap_boolean,
-          ls_poheaderx         TYPE bapimepoheaderx, "TODO: Not released
-          ls_bapimeconfitem    TYPE bapimeconfitem, "TODO: Not released
-          ls_bapimeconfitemx   TYPE bapimeconfitemx, "TODO: Not released
-          lt_bapimeconfitemx   TYPE TABLE OF bapimeconfitemx, "TODO: Not released
-          lt_bapimeconfitem    TYPE TABLE OF bapimeconfitem, "TODO: Not released
-          ls_bapimeconfdetail  TYPE bapimeconfdetail, "TODO: Not released
-          lt_bapimeconfdetail  TYPE TABLE OF bapimeconfdetail, "TODO: Not released
-          lt_bapimeconfdetailx TYPE TABLE OF bapimeconfdetailx, "TODO: Not released
-          ls_bapimeconfdetailx TYPE bapimeconfdetailx, "TODO: Not released
-          lt_return            TYPE TABLE OF bapiret2,
-          ls_return            TYPE bapiret2,
-          lv_bapi_error        TYPE abap_boolean,
-          ls_confirmation      TYPE /df5/db_pcid,
-          lt_log               TYPE TABLE OF /df5/db_poco,
-          ls_action            TYPE /df5/db_acid.
+    DATA:
+      ls_polist            TYPE /df5/i_poconf_list,
+      ls_line              TYPE /df5/i_poconf_list,
+      lt_temppolist        TYPE STANDARD TABLE OF /df5/i_poconf_list WITH EMPTY KEY,
+      lv_purchaseorder     TYPE ebeln,
+      ls_poheader          TYPE bapimepoheader, "TODO: Not released
+      lv_ebelp             TYPE ebelp,
+      lv_changepo          TYPE abap_boolean,
+      ls_poheaderx         TYPE bapimepoheaderx, "TODO: Not released
+      ls_bapimeconfitem    TYPE bapimeconfitem, "TODO: Not released
+      ls_bapimeconfitemx   TYPE bapimeconfitemx, "TODO: Not released
+      lt_bapimeconfitemx   TYPE TABLE OF bapimeconfitemx, "TODO: Not released
+      lt_bapimeconfitem    TYPE TABLE OF bapimeconfitem, "TODO: Not released
+      ls_bapimeconfdetail  TYPE bapimeconfdetail, "TODO: Not released
+      lt_bapimeconfdetail  TYPE TABLE OF bapimeconfdetail, "TODO: Not released
+      lt_bapimeconfdetailx TYPE TABLE OF bapimeconfdetailx, "TODO: Not released
+      ls_bapimeconfdetailx TYPE bapimeconfdetailx, "TODO: Not released
+      lt_return            TYPE TABLE OF bapiret2,
+      ls_return            TYPE bapiret2,
+      lv_bapi_error        TYPE abap_boolean,
+      lt_confirmation      TYPE STANDARD TABLE OF /df5/db_pcid WITH EMPTY KEY,
+      ls_confirmation      TYPE /df5/db_pcid,
+      lt_log               TYPE TABLE OF /df5/db_poco,
+      ls_action            TYPE /df5/db_acid.
 
 *    lv_errors = abap_false. "Default is abap_false
     LOOP AT cs_buffer-mt_buffer_line_item INTO ls_polist GROUP BY ls_polist-purchaseorder.
-      LOOP AT GROUP ls_polist INTO DATA(ls_line).
+      LOOP AT GROUP ls_polist INTO ls_line.
         IF lv_ebelp <> ls_line-purchaseorderline.
           ls_bapimeconfitem-item_no = ls_line-purchaseorderline.
           lv_ebelp = ls_line-purchaseorderline.
@@ -118,6 +114,8 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
         APPEND ls_bapimeconfdetailx TO lt_bapimeconfdetailx.
       ENDLOOP.
 
+      CLEAR lv_bapi_error.
+
       lv_purchaseorder = ls_polist-purchaseorder.
       me_po_confirm(
         EXPORTING
@@ -129,12 +127,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
           iv_updatepo       = lv_changepo
         IMPORTING
           et_return         = lt_return
-          ev_errors         = lv_bapi_error ##COMPATIBLE
-      ).
-
-      IF lv_bapi_error = abap_true.
-        lv_errors = lv_bapi_error.
-      ENDIF.
+          ev_errors         = lv_bapi_error ) ##COMPATIBLE.
 
       CLEAR:
         lt_bapimeconfitem,
@@ -142,7 +135,6 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
         lt_bapimeconfdetailx,
         lt_temppolist,
         lv_ebelp,
-        lv_bapi_error,
         ls_confirmation,
         lt_log.
 
@@ -150,9 +142,8 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
       ls_confirmation-purchaseorder = lv_purchaseorder.
       ls_confirmation-created_on = cs_buffer-mv_timestamp.
       ls_confirmation-created_by = sy-uname.
-      INSERT /df5/db_pcid FROM ls_confirmation.     "#EC CI_IMUD_NESTED
 
-      FREE lt_log.
+      APPEND ls_confirmation TO lt_confirmation.
 
       DELETE ADJACENT DUPLICATES FROM lt_return.
       LOOP AT lt_return ASSIGNING FIELD-SYMBOL(<ls_return>).
@@ -176,14 +167,29 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
         <ls_log>-ztype = <ls_return>-type.
       ENDLOOP.
 
-      INSERT /df5/db_poco FROM TABLE lt_log.        "#EC CI_IMUD_NESTED
     ENDLOOP.
 
-    IF lv_errors EQ abap_false.
+    INSERT /df5/db_pcid FROM TABLE @lt_confirmation.      "#EC CI_SUBRC
+    INSERT /df5/db_poco FROM TABLE @lt_log.               "#EC CI_SUBRC
+
+    IF lv_bapi_error = abap_false.
       " if no error fill the return
-      CALL FUNCTION 'BAPI_TRANSACTION_COMMIT' DESTINATION 'NONE'.
+      CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+        DESTINATION 'NONE'
+        EXCEPTIONS
+          system_failure        = 1
+          communication_failure = 2
+          resource_failure      = 3
+          OTHERS                = 4.
+
     ELSE.
-      CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK' DESTINATION 'NONE'.
+      CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'
+        DESTINATION 'NONE'
+        EXCEPTIONS
+          system_failure        = 1
+          communication_failure = 2
+          resource_failure      = 3
+          OTHERS                = 4.
     ENDIF.
 
     GET TIME STAMP FIELD DATA(lv_tsl2).
@@ -191,45 +197,12 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
     ls_action-created_on = lv_tsl2.
     ls_action-created_by = sy-uname.
 
-    INSERT /df5/db_acid FROM ls_action.             "#EC CI_IMUD_NESTED
-  ENDMETHOD.
-
-
-  METHOD get_eket_info BY DATABASE FUNCTION
-          FOR HDB
-          LANGUAGE SQLSCRIPT
-          OPTIONS READ-ONLY
-          USING eket.
-
-
-    RETURN
-      SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MIN(eindt) AS date
-        FROM eket
-        WHERE eindt >= to_dats(current_date)
-        GROUP BY mandt, ebeln, ebelp
-      UNION
-      SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MAX(eindt) AS date
-        FROM (
-          select mandt, ebeln, ebelp, eindt, menge
-            FROM eket AS eket1
-            WHERE eindt < to_dats(current_date)
-        ) AS ekettemp
-        WHERE NOT EXISTS (
-          SELECT mandt, ebeln AS purchaseorder, ebelp AS purchaseorderline, MIN(eindt) AS date
-            FROM eket
-            WHERE eindt >= to_dats(current_date)
-              AND ekettemp.ebeln = eket.ebeln
-              and ekettemp.ebelp = eket.ebelp
-            group by mandt, ebeln, ebelp
-        )
-        GROUP BY mandt, ebeln, ebelp;
-
+    INSERT /df5/db_acid FROM @ls_action. "#EC CI_IMUD_NESTED "#EC CI_SUBRC
   ENDMETHOD.
 
 
   METHOD me_po_confirm.
-    DATA: lv_errors        TYPE abap_boolean,
-          lv_purchaseorder TYPE ebeln,
+    DATA: lv_purchaseorder TYPE ebeln,
           ls_poheader      TYPE bapimepoheader, "TODO: Not released
           ls_poheaderx     TYPE bapimepoheaderx, "TODO: Not released
           lt_return_change TYPE STANDARD TABLE OF bapiret2,
@@ -240,68 +213,64 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
           ls_poschedule    TYPE bapimeposchedule, "TODO: Not released
           lt_poschedule    TYPE STANDARD TABLE OF bapimeposchedule, "TODO: Not released
           ls_poschedulex   TYPE bapimeposchedulx, "TODO: Not released
-          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx. "TODO: Not released
+          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx, "TODO: Not released
+          ls_lines         TYPE /df5/i_poconf_list.
 
-*    lv_errors = abap_false. "Default is abap_false
-
-    CALL FUNCTION 'ME_PO_CONFIRM' DESTINATION 'NONE'
+    /df5/cl_me_po_confirm=>me_po_confirm(
       EXPORTING
-        document_no   = iv_ebeln
-        item          = it_items
-        confirmation  = it_confirmations
-        confirmationx = it_confirmationsx
+        iv_destination   = 'NONE'
+        iv_document_no   = iv_ebeln
+        it_item          = it_items
+        it_confirmation  = it_confirmations
+        it_confirmationx = it_confirmationsx
       IMPORTING
-        return        = et_return.
+        et_return        = et_return ).
 
     IF sy-subrc = 0.
-      LOOP AT et_return ASSIGNING FIELD-SYMBOL(<lfs_return>).
-        IF <lfs_return>-type = 'E' OR <lfs_return>-type = 'A'.
-          lv_errors = abap_true.
-          "CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'.
-          "EXIT.
+      LOOP AT et_return ASSIGNING FIELD-SYMBOL(<ls_return>).
+        IF <ls_return>-type = 'E' OR <ls_return>-type = 'A'.
+          ev_errors = abap_true.
         ENDIF.
       ENDLOOP.
     ELSE.
-      lv_errors = abap_true.
+      ev_errors = abap_true.
     ENDIF.
 
     IF iv_updatepo = abap_true.
-      LOOP AT it_poupdates INTO DATA(ls_lines).
-        ls_poitem-po_item  = ls_lines-purchaseorderline.
+      LOOP AT it_poupdates INTO ls_lines.
+        ls_poitem-po_item = ls_lines-purchaseorderline.
         ls_poitem-stge_loc = ls_lines-storagelocation.
         ls_poitem-net_price = ls_lines-netprice.
         lt_poitem = VALUE #( BASE lt_poitem ( ls_poitem ) ).
 
-        ls_poitemx-po_item  = ls_lines-purchaseorderline.
+        ls_poitemx-po_item = ls_lines-purchaseorderline.
         ls_poitemx-stge_loc = 'X'.
         ls_poitemx-net_price = 'X'.
         lt_poitemx = VALUE #( BASE lt_poitemx ( ls_poitemx ) ).
       ENDLOOP.
 
-      CALL FUNCTION 'BAPI_PO_CHANGE' DESTINATION 'NONE'
+      /df5/cl_bapi_po_change=>bapi_po_change(
         EXPORTING
-          purchaseorder = iv_ebeln
-          poheader      = ls_poheader
-          poheaderx     = ls_poheaderx
-        TABLES
-          return        = lt_return_change
-          poitem        = lt_poitem
-          poitemx       = lt_poitemx.
+          iv_destination   = 'NONE'
+          iv_purchaseorder = iv_ebeln
+          is_poheader      = ls_poheader
+          is_poheaderx     = ls_poheaderx
+        CHANGING
+          ct_return        = lt_return_change
+          ct_poitem        = lt_poitem
+          ct_poitemx       = lt_poitemx ).
 
       IF sy-subrc = 0.
-        LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<lfs_return2>).
-          APPEND <lfs_return2> TO et_return.
-          IF <lfs_return2>-type = 'E' OR <lfs_return2>-type = 'A'.
-            lv_errors = abap_true.
+        LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<ls_return2>).
+          APPEND <ls_return2> TO et_return.
+          IF <ls_return2>-type = 'E' OR <ls_return2>-type = 'A'.
+            ev_errors = abap_true.
           ENDIF.
         ENDLOOP.
-
       ELSE.
-        lv_errors = abap_true.
+        ev_errors = abap_true.
       ENDIF.
 
     ENDIF.
-
-    ev_errors = lv_errors.
   ENDMETHOD.
 ENDCLASS.

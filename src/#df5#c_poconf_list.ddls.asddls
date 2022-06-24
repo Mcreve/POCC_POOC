@@ -7,7 +7,7 @@ define view entity /DF5/C_POCONF_LIST
       @EndUserText.label: 'Purchase order'
   key PurchaseOrder,
   key PurchaseOrderLine,
-      @EndUserText.label: 'Conf. N°'
+      @EndUserText.label: 'Conf. Nr'
   key SupplierConfirmation,
       Plant,
       StorageLocation,
@@ -59,11 +59,5 @@ define view entity /DF5/C_POCONF_LIST
       TempNetPr,
 
       /* Associations */
-      _/DF5/I_MM_PO_PRODUCTGROUP_VH,
-      _/DF5/I_MM_PO_PRODUCT_VH,
-      _/DF5/I_MM_PORG_PLANT_VH,
-      _/DF5/I_MM_SMPLSUPPLIER_VH,
-      _/DF5/I_MM_PURCHASINGGROUP_VH,
-      _/DF5/I_MM_PURCHASINGORG_VH,
       _Header : redirected to parent /DF5/C_POCONF_ID
 }

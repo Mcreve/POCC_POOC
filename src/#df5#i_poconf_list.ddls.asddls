@@ -10,12 +10,12 @@ define view /DF5/I_POCONF_LIST
 
   association        to parent /DF5/I_POCONF_ID      as _Header                       on  _Header.purchaseorder = $projection.PurchaseOrder
                                                                                       and _Header.actionid      = $projection.ActionId
-  association [0..1] to /DF5/I_MM_PURCHASINGORG_VH   as _/DF5/I_MM_PURCHASINGORG_VH   on  Orders.PurchOrganisation = _/DF5/I_MM_PURCHASINGORG_VH.PurchasingOrganization
-  association [0..1] to /DF5/I_MM_PORG_PLANT_VH      as _/DF5/I_MM_PORG_PLANT_VH      on  Orders.Plant = _/DF5/I_MM_PORG_PLANT_VH.Plant
-  association [0..1] to /DF5/I_MM_SMPLSUPPLIER_VH    as _/DF5/I_MM_SMPLSUPPLIER_VH    on  Orders.Supplier = _/DF5/I_MM_SMPLSUPPLIER_VH.Supplier
-  association [0..1] to /DF5/I_MM_PO_PRODUCTGROUP_VH as _/DF5/I_MM_PO_PRODUCTGROUP_VH on  Orders.MaterialClass = _/DF5/I_MM_PO_PRODUCTGROUP_VH.MaterialGroup
-  association [0..1] to /DF5/I_MM_PO_PRODUCT_VH      as _/DF5/I_MM_PO_PRODUCT_VH      on  Orders.Material = _/DF5/I_MM_PO_PRODUCT_VH.Product
-  association [0..1] to /DF5/I_MM_PURCHASINGGROUP_VH as _/DF5/I_MM_PURCHASINGGROUP_VH on  Orders.PurchGroup = _/DF5/I_MM_PURCHASINGGROUP_VH.PurchasingGroup
+//  association [0..1] to /DF5/I_PURCHASINGORG_VH      as _/DF5/I_PURCHASINGORG_VH      on  Orders.PurchOrganisation = _/DF5/I_PURCHASINGORG_VH.PurchasingOrganization
+//  association [0..1] to /DF5/I_PLANTPURCHASINGORG_VH as _/DF5/I_PLANTPURCHASINGORG_VH on  Orders.Plant = _/DF5/I_PLANTPURCHASINGORG_VH.Plant
+//  association [0..1] to /DF5/I_MM_SMPLSUPPLIER_VH    as _/DF5/I_MM_SMPLSUPPLIER_VH    on  Orders.Supplier = _/DF5/I_MM_SMPLSUPPLIER_VH.Supplier
+//  association [0..1] to /DF5/I_PRODUCTGROUP_2_VH     as _/DF5/I_PRODUCTGROUP_2_VH     on  Orders.MaterialClass = _/DF5/I_PRODUCTGROUP_2_VH.ProductGroup
+//  association [0..1] to /DF5/I_MM_PRODUCT_VH         as _/DF5/I_MM_PRODUCT_VH         on  Orders.Material = _/DF5/I_MM_PRODUCT_VH.Product
+//  association [0..1] to /DF5/I_PURCHASINGGROUP_VH    as _/DF5/I_PURCHASINGGROUP_VH    on  Orders.PurchGroup = _/DF5/I_PURCHASINGGROUP_VH.PurchasingGroup
 {
       //Orders
   key PurchaseOrder,
@@ -68,12 +68,12 @@ define view /DF5/I_POCONF_LIST
       _Items,
       _Supplier,
       _Product,
-      _Header,
-      _/DF5/I_MM_PURCHASINGORG_VH,
-      _/DF5/I_MM_PORG_PLANT_VH,
-      _/DF5/I_MM_SMPLSUPPLIER_VH,
-      _/DF5/I_MM_PO_PRODUCTGROUP_VH,
-      _/DF5/I_MM_PO_PRODUCT_VH,
-      _/DF5/I_MM_PURCHASINGGROUP_VH
+      _Header
+//      _/DF5/I_PURCHASINGORG_VH,
+//      _/DF5/I_PLANTPURCHASINGORG_VH,
+//      _/DF5/I_MM_SMPLSUPPLIER_VH,
+//      _/DF5/I_PRODUCTGROUP_2_VH,
+//      _/DF5/I_MM_PRODUCT_VH,
+//      _/DF5/I_PURCHASINGGROUP_VH
 
 }

@@ -27,7 +27,7 @@ annotate view /DF5/C_POCONF_LIST with
 
   @UI: { selectionField: [ { position: 10 } ],
          lineItem:       [ { position: 60, importance: #LOW } ] }
-  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_MM_PORG_PLANT_VH', element: 'Plant' } } ]
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/I_PLANTPURCHASINGORG_VH', element: 'Plant' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   Plant;
 
@@ -46,13 +46,13 @@ annotate view /DF5/C_POCONF_LIST with
 
   @UI: { selectionField: [ { position: 30 } ],
          lineItem:       [ { position: 100, importance: #HIGH } ] }
-  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_MM_PURCHASINGORG_VH', element: 'PurchasingOrganisation' } } ]
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PURCHASINGORG_VH', element: 'PurchasingOrganisation' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   PurchOrganisation;
 
   @UI: { selectionField: [ { position: 40 } ],
          lineItem:       [ { position: 110, importance: #HIGH } ] }
-  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_MM_PURCHASINGGROUP_VH', element: 'PurchasingGroup' } } ]
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PURCHASINGGROUP_VH', element: 'PurchasingGroup' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   PurchGroup;
   
@@ -63,13 +63,13 @@ annotate view /DF5/C_POCONF_LIST with
   
   @UI: { selectionField: [ { position: 60 } ],
          lineItem:       [ { position: 130, importance: #HIGH } ] }
-  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_MM_PO_PRODUCT_VH', element: 'Product' } } ]
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/I_MM_PRODUCT_VH', element: 'Product' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   Material;
   
   @UI: { selectionField: [ { position: 70 } ],
          lineItem:       [ { position: 140, importance: #HIGH } ] }
-  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_MM_PO_PRODUCTGROUP_VH', element: 'MaterialGroup' } } ]
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PRODUCTGROUP_2_VH', element: 'ProductGroup' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   MaterialClass;
   

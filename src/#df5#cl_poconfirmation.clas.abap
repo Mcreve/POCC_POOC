@@ -13,7 +13,7 @@ CLASS /df5/cl_poconfirmation DEFINITION
         ms_buffer_conf_header TYPE /df5/i_poconf_id,
         mt_buffer_conf_header TYPE gty_t_conf_headers,
         mt_buffer_line_item   TYPE gty_t_contract_items,
-        mv_guid               TYPE sysuuid_22, "TODO: Not released
+        mv_guid               TYPE sysuuid_c22,
         mv_user               TYPE syuname,
         mv_timestamp          TYPE timestampl,
       END OF gty_s_buffer.
@@ -218,14 +218,13 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
     /df5/cl_me_po_confirm=>me_po_confirm(
       EXPORTING
-        iv_destination      = 'NONE'
-        iv_document_no      = iv_ebeln
-        it_item             = it_items
-        it_confirmation     = it_confirmations
-        it_confirmationx    = it_confirmationsx
+        iv_destination   = 'NONE'
+        iv_document_no   = iv_ebeln
+        it_item          = it_items
+        it_confirmation  = it_confirmations
+        it_confirmationx = it_confirmationsx
       IMPORTING
-        et_return           = et_return
-    ).
+        et_return        = et_return ).
 
     IF sy-subrc = 0.
       LOOP AT et_return ASSIGNING FIELD-SYMBOL(<ls_return>).
@@ -252,15 +251,14 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
       /df5/cl_bapi_po_change=>bapi_po_change(
         EXPORTING
-          iv_destination            = 'NONE'
-          iv_purchaseorder          = iv_ebeln
-          is_poheader               = ls_poheader
-          is_poheaderx              = ls_poheaderx
+          iv_destination   = 'NONE'
+          iv_purchaseorder = iv_ebeln
+          is_poheader      = ls_poheader
+          is_poheaderx     = ls_poheaderx
         CHANGING
-          ct_return                 = lt_return_change
-          ct_poitem                 = lt_poitem
-          ct_poitemx                = lt_poitemx
-      ).
+          ct_return        = lt_return_change
+          ct_poitem        = lt_poitem
+          ct_poitemx       = lt_poitemx ).
 
       IF sy-subrc = 0.
         LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<ls_return2>).

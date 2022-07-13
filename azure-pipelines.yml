@@ -7,7 +7,7 @@ steps:
 - task: AzurePowerShell@4
   displayName: 'Download pickle file from mounted storage account'
   inputs:
-    azureSubscription: 'GSI-EM-AZ1'
+    azureSubscription: 'GSI-EM-AZ1(2d08d8a6-aefd-4d28-845c-28a463c38366)'
     ScriptType: 'InlineScript'
     Inline: |
       $ResourceGroupName = "GSI-EM-AZ1-RG-FAST-SA"

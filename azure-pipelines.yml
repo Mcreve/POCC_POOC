@@ -23,12 +23,12 @@ steps:
 #- checkout: git://GCC FAST Core/abaplint_configuration
 #  path: abaplint_conf
 #- checkout: self
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Agent.BuildDirectory)\abaplint_conf'
-    Contents: 'abaplint.json'
-    TargetFolder: '$(Agent.BuildDirectory)\s\MM_PO_CONF'
-  displayName: 'Copy abaplint.json to repo'
+# - task: CopyFiles@2
+#   inputs:
+#     SourceFolder: '$(Agent.BuildDirectory)\abaplint_conf'
+#     Contents: 'abaplint.json'
+#     TargetFolder: '$(Agent.BuildDirectory)\s\MM_PO_CONF'
+#   displayName: 'Copy abaplint.json to repo'
 - script: |
     abaplint --version
   displayName: 'abaplint Version'

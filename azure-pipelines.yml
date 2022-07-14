@@ -23,7 +23,6 @@ steps:
     abaplint --version
   displayName: 'abaplint Version'
 - script: |
-    cd $(Agent.BuildDirectory)\s &
     abaplint -f standard --outformat junit --outfile $(Agent.BuildDirectory)\s\report.xml || true
   displayName: 'abaplint Run'
 - task: PublishTestResults@2

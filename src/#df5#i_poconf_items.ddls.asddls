@@ -29,6 +29,7 @@ define view /DF5/I_POCONF_ITEMS
       PurchaseOrders.Meins as UoM,
 
       PurchaseOrders.Loekz,
+      PurchaseOrders.Bstae as ConfirmationControlKey,
 
       _ekes.Ebeln          as ekes_ebeln,
       _ekes.Ebelp          as ekes_ebelp,

@@ -40,19 +40,16 @@ define view entity /DF5/C_POCONF_LIST
       NetPrice,
       @EndUserText.label: 'Reduced Qty.'
       ReducedQuantity,
-//      @ObjectModel.text.element: ['ConfirmationLineStatusTxt']
-//      ConfirmationLinestatus,
- 
-        @EndUserText.label: 'Conf. Line Status'
+      @EndUserText.label: 'Conf. Line Status'
       _ConfirmLineStatusText._Text.ConfirmationLineStatusTxt as ConfirmationLinestatus : localized,
       ConfirmLineCriticality,
-//      @ObjectModel.text.element: ['LineStatusTxt']
-//      ConfirmationStatus,
-       @EndUserText.label: 'Line Status'
+      @EndUserText.label: 'Line Status'
       _LineStatusText._Text.LineStatusTxt                    as ConfirmationStatus     : localized,
       ConfirmCriticality,
       ActionId,
       UoM,
+      ConfirmationControlKey,
+      ConfirmationControlCategory,
       Currency,
       Changed,
       TempStoreLoc,

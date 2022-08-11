@@ -35,6 +35,8 @@ define view /DF5/I_POCONF_HEAD
       _Items.eket_eindt,
       _Items.eket_menge,
       _Items.UoM,
+      _Items.ConfirmationControlKey,
+      _Items.ConfirmationControlCategory,
       POHeader.Waers                as Currency,
 
       /* Associations */

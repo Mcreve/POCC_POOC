@@ -8,7 +8,7 @@ define view /DF5/I_POCONFIRMATION
   association [1..1] to /DF5/I_POCONF_SUM as _sum on  _sum.PurchaseOrder     = $projection.PurchaseOrder
                                                   and _sum.PurchaseOrderItem = $projection.PurchaseOrderItem
 {
-  key ebeln,
+  key Ebeln,
   key PurchaseOrderItem,
   key SupplierConfirmation,
       PurchaseOrder,
@@ -50,6 +50,8 @@ define view /DF5/I_POCONFIRMATION
       cast('0' as abap.char( 22 )) as ActionId,
       @Semantics.unitOfMeasure: true
       UoM,
+      ConfirmationControlKey,
+      ConfirmationControlCategory,
       @Semantics.currencyCode: true
       Currency,
 

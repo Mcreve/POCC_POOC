@@ -74,13 +74,13 @@ annotate view /DF5/C_POCONF_LIST with
 
   @UI: { selectionField: [ { position: 80 } ],
          lineItem:       [ { position: 142, importance: #HIGH } ] }
-//  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PRODUCTGROUP_2_VH', element: 'ProductGroup' } } ]
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_SUPPLIERCONFCTRLKEY_VH', element: 'SupplierConfirmationControlKey' } } ]
   @Search: { defaultSearchElement: true, ranking: #MEDIUM, fuzzinessThreshold: 0.8 }
   ConfirmationControlKey;
 
   @UI: { selectionField: [ { position: 90 } ],
          lineItem:       [ { position: 147, importance: #HIGH } ] }
-//  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PRODUCTGROUP_2_VH', element: 'ProductGroup' } } ]
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_SUPPLIERCONFCATEGORY_VH', element: 'SupplierConfirmationCategory' } } ]
   @Search: { defaultSearchElement: true, ranking: #MEDIUM, fuzzinessThreshold: 0.8 }
   ConfirmationControlCategory;
 
@@ -114,6 +114,12 @@ annotate view /DF5/C_POCONF_LIST with
 
   @UI.lineItem: [ { position: 240, importance: #LOW } ]
   NetPrice;
+
+  @UI.lineItem: [ { position: 243, importance: #LOW } ]
+  PriceUnit;
+
+  @UI.lineItem: [ { position: 247, importance: #LOW } ]
+  OrderPriceUnit;
 
   @UI.lineItem: [ { position: 250, importance: #LOW } ]
   ReducedQuantity;

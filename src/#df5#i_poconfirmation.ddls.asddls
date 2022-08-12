@@ -50,6 +50,8 @@ define view /DF5/I_POCONFIRMATION
       cast('0' as abap.char( 22 )) as ActionId,
       @Semantics.unitOfMeasure: true
       UoM,
+      PriceUnit,
+      OrderPriceUnit,
       ConfirmationControlKey,
       ConfirmationControlCategory,
       @Semantics.currencyCode: true

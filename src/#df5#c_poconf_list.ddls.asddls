@@ -48,6 +48,8 @@ define view entity /DF5/C_POCONF_LIST
       ConfirmCriticality,
       ActionId,
       UoM,
+      PriceUnit,
+      OrderPriceUnit,
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,

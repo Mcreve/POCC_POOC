@@ -30,6 +30,8 @@ define view /DF5/I_POCONF_ITEMS
       PurchaseOrders.Menge       as RequestedQuantity,
       PurchaseOrders.Netpr       as NetPrice,
       PurchaseOrders.Meins       as UoM,
+      PurchaseOrders.Peinh       as PriceUnit,
+      PurchaseOrders.Bprme       as OrderPriceUnit,
 
       PurchaseOrders.Loekz,
       PurchaseOrders.Bstae       as ConfirmationControlKey,

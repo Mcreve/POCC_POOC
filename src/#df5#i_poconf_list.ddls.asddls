@@ -50,6 +50,8 @@ define view /DF5/I_POCONF_LIST
       _LineStatusText,
       ActionId,
       UoM,
+      PriceUnit,
+      OrderPriceUnit,
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,

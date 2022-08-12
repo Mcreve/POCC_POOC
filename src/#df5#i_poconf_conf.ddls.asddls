@@ -39,6 +39,8 @@ define view /DF5/I_POCONF_CONF
       'C'        as ConfirmationLinestatus,
       ActionId,
       UoM,
+      PriceUnit,
+      OrderPriceUnit,
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,

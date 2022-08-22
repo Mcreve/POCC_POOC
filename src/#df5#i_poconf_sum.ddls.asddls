@@ -7,12 +7,11 @@ define view /DF5/I_POCONF_SUM
   as select from /DF5/I_POCONF_HEAD
 {
 
-  key ebeln             as PurchaseOrder,
+  key Ebeln                                as PurchaseOrder,
   key PurchaseOrderItem,
-      //key SupplierConfirmation,
-      sum( ekes_menge ) as TotalConfirmed
+  cast(sum( ekes_menge ) as abap.int4) as TotalConfirmed
 }
 group by
-  ebeln,
+  Ebeln,
   PurchaseOrderItem
 //    SupplierConfirmation

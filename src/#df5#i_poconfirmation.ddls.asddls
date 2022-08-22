@@ -62,3 +62,4 @@ define view /DF5/I_POCONFIRMATION
       _Supplier,
       _Product
 }
+where PurchaseOrderItem != '00000'

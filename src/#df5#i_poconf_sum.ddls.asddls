@@ -9,7 +9,7 @@ define view /DF5/I_POCONF_SUM
 
   key Ebeln                                as PurchaseOrder,
   key PurchaseOrderItem,
-  cast(sum( ekes_menge ) as abap.int4) as TotalConfirmed
+  sum( ekes_menge ) as TotalConfirmed
 }
 group by
   Ebeln,

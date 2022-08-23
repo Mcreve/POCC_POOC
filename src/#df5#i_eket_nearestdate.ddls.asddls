@@ -8,7 +8,7 @@ define view /DF5/I_EKET_NEARESTDATE
 {
   key Ebeln      as PurchaseOrder,
   key Ebelp      as PurchaseOrderline,
-      min(Eindt) as ItemDeliveryDate
+  min(Eindt) as ItemDeliveryDate
 }
 where
   Eindt >= $session.system_date
@@ -17,10 +17,10 @@ group by
   Ebelp
 union select from /DF5/I_EKET_NEARESTDATE_2
 {
-  key Ebeln      as PurchaseOrder,
-  key Ebelp      as PurchaseOrderline,
-      max(Eindt) as ItemDeliveryDate
+  key PurchaseOrder,
+  key PurchaseOrderLine,
+  max(ItemDeliveryDate) as ItemDeliveryDate
 }
 group by
-  Ebeln,
-  Ebelp
+  PurchaseOrder,
+  PurchaseOrderLine

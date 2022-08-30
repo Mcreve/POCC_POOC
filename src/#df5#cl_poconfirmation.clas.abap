@@ -264,7 +264,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
         LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<ls_return2>).
           APPEND <ls_return2> TO et_return.
           IF <ls_return2>-type = 'E' OR <ls_return2>-type = 'A'
-          OR ( <ls_return2>-type = 'A' AND <ls_return2>-id = 'ME' AND <ls_return2>-number = '664' ).
+          OR ( <ls_return2>-id = 'ME' AND <ls_return2>-number = '664' ).
             ev_errors = abap_true.
           ENDIF.
         ENDLOOP.

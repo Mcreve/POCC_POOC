@@ -262,11 +262,17 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
       IF sy-subrc = 0.
         LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<ls_return2>).
-          APPEND <ls_return2> TO et_return.
           IF <ls_return2>-type = 'E' OR <ls_return2>-type = 'A'
           OR ( <ls_return2>-id = 'ME' AND <ls_return2>-number = '664' ).
             ev_errors = abap_true.
+
+            IF <ls_return2>-id = 'ME' AND <ls_return2>-number = '664'.
+              "Change log type from Success to error in order to get result
+              <ls_return2>-type = 'E'.
+            ENDIF.
           ENDIF.
+
+          APPEND <ls_return2> TO et_return.
         ENDLOOP.
       ELSE.
         ev_errors = abap_true.

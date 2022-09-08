@@ -13,23 +13,16 @@ resources:
 
 steps:
 - checkout: self
-# - script: ls
-#   displayName: 'List files'
-# - script: ls MM_PO_CONF
 - checkout: MyGitHubRepo
-# - script: ls ABAP_MM_PO_CONF
-- script: |
-    cp -r MM_PO_CONF/. ABAP_MM_PO_CONF/
-# - script: echo Hello, world!
-#   displayName: 'Run a one-line script'
-- script: |
-    cp -R MM_PO_CONF ABAP_MM_PO_CONF
-- script: ls -hal ABAP_MM_PO_CONF
-
 # - script: |
-#     echo Add other tasks to build, test, and deploy your project.
-#     echo See https://aka.ms/yaml
-#   displayName: 'Run a multi-line script'
+#     cp -r MM_PO_CONF/. ABAP_MM_PO_CONF/
+- script: |
+    rsync -av --progress MM_PO_CONF ABAP_MM_PO_CONF --exclude .git
+  displayName: 'Copy file content to local folder of GitHub repo'
+# - script: |
+#     cp -R MM_PO_CONF ABAP_MM_PO_CONF
+- script: ls -hal ABAP_MM_PO_CONF
+  displayName: 'List local GitHub repo contents'
 
 - script: |
     cd ABAP_MM_PO_CONF

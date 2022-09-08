@@ -24,7 +24,7 @@ steps:
 #   displayName: 'Run a one-line script'
 - script: |
     cp -R MM_PO_CONF ABAP_MM_PO_CONF
-- script: ls ABAP_MM_PO_CONF
+- script: ls -hal ABAP_MM_PO_CONF
 
 # - script: |
 #     echo Add other tasks to build, test, and deploy your project.

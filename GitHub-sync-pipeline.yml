@@ -47,5 +47,5 @@ steps:
 
 - script: |
     cd ABAP_MM_PO_CONF
-    git push origin master
+    git push origin HEAD:main
   displayName: 'Push commit'

@@ -6,7 +6,7 @@ pool:
 
 resources:
   repositories:
-  - repository: MyGitHubRepo # The name used to reference this repository in the checkout step
+  - repository: MyGitHubRepo
     type: github
     endpoint: netweaverdlw
     name: netweaverdlw/ABAP_MM_PO_CONF
@@ -39,11 +39,6 @@ steps:
     git config --global user.name "BHeldens"
     git commit -m 'Automated sync from DevOps'
   displayName: 'Commit staged files'
-
-# - script: |
-#     cd ABAP_MM_PO_CONF
-#     git push
-#   displayName: 'Push commit'
 
 - script: |
     cd ABAP_MM_PO_CONF

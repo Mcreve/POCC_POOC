@@ -14,16 +14,8 @@ resources:
 steps:
 - checkout: self
 - checkout: MyGitHubRepo
-# - script: |
-#     cp -r MM_PO_CONF/. ABAP_MM_PO_CONF/
-# - script: |
-#     cp -R MM_PO_CONF ABAP_MM_PO_CONF
 
-# - script: |
-#     rsync -av --progress MM_PO_CONF ABAP_MM_PO_CONF --exclude .git
-#   displayName: 'Copy file content to local folder of GitHub repo'
-- script: |
-    rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/ --exclude .git
+- script: rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/ --exclude .git
   displayName: 'Copy file content to local folder of GitHub repo'
 
 - script: ls -hal ABAP_MM_PO_CONF
@@ -31,14 +23,13 @@ steps:
 
 - script: |
     cd ABAP_MM_PO_CONF
-    git status
+    git add .
+  displayName: 'Stage untracked files'
+
+- script: git status
   displayName: 'Check git status'
 
 - script: |
     cd ABAP_MM_PO_CONF
-    git add .
-  displayName: 'Stage untracked files'
-- script: |
-    cd ABAP_MM_PO_CONF
-    git status
-  displayName: 'Check git status'
+    git commit -m 'Automated sync from DevOps'
+  displayName: 'Commit staged files'

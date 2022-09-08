@@ -14,6 +14,8 @@ resources:
 steps:
 - checkout: self
 - checkout: MyGitHubRepo
+  persistCredentials: true
+  clean: true
 
 - script: rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/ --exclude .git
   displayName: 'Copy file content to local folder of GitHub repo'
@@ -35,10 +37,15 @@ steps:
     cd ABAP_MM_PO_CONF
     git config --global user.email "brecht.heldens@delaware.pro"
     git config --global user.name "BHeldens"
+    git commit -m 'Automated sync from DevOps'
   displayName: 'Commit staged files'
 
 - script: |
     cd ABAP_MM_PO_CONF
-    git commit -m 'Automated sync from DevOps'
     git push
   displayName: 'Push commit'
+
+# - script: |
+#     cd ABAP_MM_PO_CONF
+#     git push origin master
+#   displayName: 'Push commit'

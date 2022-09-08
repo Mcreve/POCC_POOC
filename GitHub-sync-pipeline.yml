@@ -12,7 +12,9 @@ resources:
     name: netweaverdlw/ABAP_MM_PO_CONF
 
 steps:
-# - checkout: self
+- checkout: self
+- script: ls
+  displayName: 'List files'
 - checkout: MyGitHubRepo
 - script: echo Hello, world!
   displayName: 'Run a one-line script'

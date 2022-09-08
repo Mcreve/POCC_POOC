@@ -37,3 +37,8 @@ steps:
     git config --global user.name "BHeldens"
     git commit -m 'Automated sync from DevOps'
   displayName: 'Commit staged files'
+
+- script: |
+    cd ABAP_MM_PO_CONF
+    git push origin main
+  displayName: 'Push commit'

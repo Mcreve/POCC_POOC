@@ -4,6 +4,13 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+resources:
+  repositories:
+  - repository: MyGitHubRepo # The name used to reference this repository in the checkout step
+    type: github
+    endpoint: netweaverdlw
+    name: netweaverdlw/ABAP_MM_PO_CONF
+
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'

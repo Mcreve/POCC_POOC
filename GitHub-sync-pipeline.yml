@@ -19,7 +19,7 @@ steps:
 
 - script: |
     cd ABAP_MM_PO_CONF
-    git checkout main
+    git checkout master
   displayName: 'Switch to main branch'
 
 - script: rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/ --exclude .git

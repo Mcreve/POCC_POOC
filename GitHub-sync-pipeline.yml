@@ -17,11 +17,6 @@ steps:
   persistCredentials: true
   clean: true
 
-- script: |
-    cd ABAP_MM_PO_CONF
-    git checkout master
-  displayName: 'Switch to main branch'
-
 - script: rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/ --exclude .git
   displayName: 'Copy file content to local folder of GitHub repo'
 
@@ -45,12 +40,12 @@ steps:
     git commit -m 'Automated sync from DevOps'
   displayName: 'Commit staged files'
 
-- script: |
-    cd ABAP_MM_PO_CONF
-    git push
-  displayName: 'Push commit'
-
 # - script: |
 #     cd ABAP_MM_PO_CONF
-#     git push origin master
+#     git push
 #   displayName: 'Push commit'
+
+- script: |
+    cd ABAP_MM_PO_CONF
+    git push origin master
+  displayName: 'Push commit'

@@ -16,8 +16,8 @@ steps:
 - script: ls
   displayName: 'List files'
 - script: ls MM_PO_CONF
-- script: ls ABAP_MM_PO_CONF
 - checkout: MyGitHubRepo
+- script: ls ABAP_MM_PO_CONF
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
@@ -26,7 +26,9 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-- script: git status
+- script: |
+    cd ABAP_MM_PO_CONF
+    git status
   displayName: 'Check git status'
 
 # pool:

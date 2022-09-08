@@ -19,7 +19,7 @@ steps:
 - checkout: MyGitHubRepo
 - script: ls ABAP_MM_PO_CONF
 - script: |
-    cp -a MM_PO_CONF ABAP_MM_PO_CONF
+    cp -r MM_PO_CONF/. ABAP_MM_PO_CONF/
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 - script: ls ABAP_MM_PO_CONF

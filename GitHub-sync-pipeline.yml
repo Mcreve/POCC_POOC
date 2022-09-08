@@ -42,28 +42,3 @@ steps:
     cd ABAP_MM_PO_CONF
     git status
   displayName: 'Check git status'
-
-# pool:
-#   vmImage: 'windows-2019'
-# steps:
-# - script: |
-#     npm install @abaplint/cli -g
-#   displayName: 'abaplint Install'
-# - task: AzurePowerShell@4
-#   displayName: 'Download abaplint config from mounted storage account'
-#   inputs:
-#     azureSubscription: 'GSI_EM_AZ1_RG_FAST_SA'
-#     ScriptType: 'InlineScript'
-#     Inline: |
-#       $ResourceGroupName = "GSI-EM-AZ1-RG-FAST-SA"
-#       $StorageAccountName = "gsiemaz1dmzfastsa0001"
-#       $StorageAccountKey = (Get-AzStorageAccountKey -ResourceGroupName $ResourceGroupName -AccountName $StorageAccountName).Value[0]
-#       $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
-#       $FileName = 'abaplint.json'
-#       $OutputPath = '$(Agent.BuildDirectory)\s\'
-#       $ContainerName  = 'abaplint'
-#       Get-AzStorageBlobContent -Blob $FileName -Container $ContainerName -Destination $OutputPath -Context $StorageContext -Force
-#     azurePowerShellVersion: 'LatestVersion'
-# - script: |
-#     abaplint --version
-#   displayName: 'abaplint Version'

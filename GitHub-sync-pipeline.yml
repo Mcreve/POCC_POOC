@@ -22,16 +22,22 @@ steps:
 # - script: |
 #     rsync -av --progress MM_PO_CONF ABAP_MM_PO_CONF --exclude .git
 #   displayName: 'Copy file content to local folder of GitHub repo'
-# - script: |
-#     rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/ --exclude .git
-#   displayName: 'Copy file content to local folder of GitHub repo'
-# - script: |
-#     rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/
-#   displayName: 'Copy file content to local folder of GitHub repo'
+- script: |
+    rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/ --exclude .git
+  displayName: 'Copy file content to local folder of GitHub repo'
 
 - script: ls -hal ABAP_MM_PO_CONF
   displayName: 'List local GitHub repo contents'
 
+- script: |
+    cd ABAP_MM_PO_CONF
+    git status
+  displayName: 'Check git status'
+
+- script: |
+    cd ABAP_MM_PO_CONF
+    git add .
+  displayName: 'Stage untracked files'
 - script: |
     cd ABAP_MM_PO_CONF
     git status

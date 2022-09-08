@@ -22,6 +22,8 @@ steps:
     cp -r MM_PO_CONF/. ABAP_MM_PO_CONF/
 # - script: echo Hello, world!
 #   displayName: 'Run a one-line script'
+- script: |
+    cp -R MM_PO_CONF ABAP_MM_PO_CONF
 - script: ls ABAP_MM_PO_CONF
 
 # - script: |

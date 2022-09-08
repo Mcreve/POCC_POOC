@@ -40,5 +40,5 @@ steps:
 - script: |
     cd ABAP_MM_PO_CONF
     git commit -m 'Automated sync from DevOps'
-    git push origin main
+    git push
   displayName: 'Push commit'

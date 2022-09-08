@@ -14,12 +14,11 @@ annotate view /DF5/C_POCONF_LIST with
   @UI.lineItem: [ { position: 20, importance: #LOW, criticality: 'ConfirmCriticality' } ]
   ConfirmationStatus;
 
-//  @EndUserText.label: 'Line'
+  //  @EndUserText.label: 'Line'
   @UI.lineItem: [ { position: 30, importance: #LOW } ]
   PurchaseOrderLine;
 
   @UI.lineItem: [ { position: 50, criticality: 'ConfirmLineCriticality' } ]
-//  @UI.lineItem: [ { position: 50 } ]
   ConfirmationLinestatus;
 
   @UI.lineItem: [ { position: 40, importance: #LOW } ]
@@ -55,58 +54,76 @@ annotate view /DF5/C_POCONF_LIST with
   @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PURCHASINGGROUP_VH', element: 'PurchasingGroup' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   PurchGroup;
-  
+
   @UI: { selectionField: [ { position: 50 } ],
          lineItem:       [ { position: 120, importance: #LOW } ] }
   @Consumption.filter.selectionType: #INTERVAL
   PODate;
-  
+
   @UI: { selectionField: [ { position: 60 } ],
          lineItem:       [ { position: 130, importance: #HIGH } ] }
   @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/I_MM_PRODUCT_VH', element: 'Product' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   Material;
-  
+
   @UI: { selectionField: [ { position: 70 } ],
          lineItem:       [ { position: 140, importance: #HIGH } ] }
   @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PRODUCTGROUP_2_VH', element: 'ProductGroup' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   MaterialClass;
-  
+
+  @UI: { selectionField: [ { position: 80 } ],
+         lineItem:       [ { position: 142, importance: #HIGH } ] }
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_SUPPLIERCONFCTRLKEY_VH', element: 'SupplierConfirmationControlKey' } } ]
+  @Search: { defaultSearchElement: true, ranking: #MEDIUM, fuzzinessThreshold: 0.8 }
+  ConfirmationControlKey;
+
+  @UI: { selectionField: [ { position: 90 } ],
+         lineItem:       [ { position: 147, importance: #HIGH } ] }
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_SUPPLIERCONFCATEGORY_VH', element: 'SupplierConfirmationCategory' } } ]
+  @Search: { defaultSearchElement: true, ranking: #MEDIUM, fuzzinessThreshold: 0.8 }
+  ConfirmationControlCategory;
+
   @UI.lineItem: [ { position: 150, importance: #HIGH } ]
   ProductName;
-  
+
   @UI.lineItem: [ { position: 160, importance: #HIGH } ]
   RequestedQuantity;
-  
+
   @UI.lineItem: [ { position: 170, importance: #HIGH } ]
   TotalConfirmed;
-  
+
   @UI.lineItem: [ { position: 180, importance: #HIGH } ]
   TotalUnconfirmed;
-  
+
   @UI.lineItem: [ { position: 190, importance: #LOW } ]
   @Consumption.filter.selectionType: #INTERVAL
   NextReqDelDate;
-  
+
   @UI.lineItem: [ { position: 200, importance: #LOW } ]
   NextRequestedQuantity;
-  
+
   @UI.lineItem: [ { position: 210, importance: #LOW } ]
   Reference;
-  
+
   @UI.lineItem: [ { position: 220, importance: #LOW } ]
   ConfirmedDelDate;
-  
+
   @UI.lineItem: [ { position: 230, importance: #LOW } ]
   Quantity;
-  
+
   @UI.lineItem: [ { position: 240, importance: #LOW } ]
   NetPrice;
-  
+
+  @UI.lineItem: [ { position: 243, importance: #LOW } ]
+  PriceUnit;
+
+  @UI.lineItem: [ { position: 247, importance: #LOW } ]
+  OrderPriceUnit;
+
   @UI.lineItem: [ { position: 250, importance: #LOW } ]
   ReducedQuantity;
-  
+
   @UI: { hidden:   true,
          lineItem: [ { position: 250, importance: #LOW } ] }
   Currency;

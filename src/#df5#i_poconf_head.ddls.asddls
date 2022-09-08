@@ -6,8 +6,8 @@
 define view /DF5/I_POCONF_HEAD
   as select from /DF5/I_EKKO as POHeader
 
-  association [1..1] to /DF5/I_POCONF_ITEMS as _Items    on _Items.PurchaseOrder = POHeader.Ebeln
-  association [0..1] to I_Supplier          as _Supplier on _Supplier.Supplier = POHeader.Lifnr
+  association [0..*] to /DF5/I_POCONF_ITEMS as _Items    on _Items.PurchaseOrder = $projection.Ebeln
+  association [0..1] to I_Supplier          as _Supplier on _Supplier.Supplier = $projection.Supplier
 {
   key POHeader.Ebeln,
   key _Items.PurchaseOrderItem,
@@ -35,6 +35,10 @@ define view /DF5/I_POCONF_HEAD
       _Items.eket_eindt,
       _Items.eket_menge,
       _Items.UoM,
+      _Items.PriceUnit,
+      _Items.OrderPriceUnit,
+      _Items.ConfirmationControlKey,
+      _Items.ConfirmationControlCategory,
       POHeader.Waers                as Currency,
 
       /* Associations */
@@ -47,4 +51,4 @@ where
   and POHeader.Memory =  ''
   and POHeader.Frgrl  =  ''
   and POHeader.Autlf  <> 'X'
-  and _Items.PurchaseOrderItem != '00000'
+  

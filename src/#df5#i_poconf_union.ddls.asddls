@@ -6,7 +6,7 @@
 define view /DF5/I_POCONF_UNION
   as select from /DF5/I_POCONF_CONF
 {
-  key ebeln as PurchaseOrder,
+  key Ebeln as PurchaseOrder,
   key PurchaseOrderItem,
   key SupplierConfirmation,
       Supplier,
@@ -35,6 +35,10 @@ define view /DF5/I_POCONF_UNION
       ConfirmationLinestatus,
       ActionId,
       UoM,
+      PriceUnit,
+      OrderPriceUnit,
+      ConfirmationControlKey,
+      ConfirmationControlCategory,
       Currency,
 
       /* Associations */
@@ -44,7 +48,7 @@ define view /DF5/I_POCONF_UNION
 }
 union select from /DF5/I_POCONF_NOTCONF
 {
-  key ebeln as PurchaseOrder,
+  key Ebeln as PurchaseOrder,
   key PurchaseOrderItem,
   key SupplierConfirmation,
       Supplier,
@@ -73,6 +77,10 @@ union select from /DF5/I_POCONF_NOTCONF
       ConfirmationLinestatus,
       ActionId,
       UoM,
+      PriceUnit,
+      OrderPriceUnit,
+      ConfirmationControlKey,
+      ConfirmationControlCategory,
       Currency,
 
       /* Associations */
@@ -82,7 +90,7 @@ union select from /DF5/I_POCONF_NOTCONF
 }
 union select distinct from /DF5/I_POCONF_DRAFT
 {
-  key ebeln as PurchaseOrder,
+  key Ebeln as PurchaseOrder,
   key PurchaseOrderItem,
   key SupplierConfirmation,
       Supplier,
@@ -111,6 +119,10 @@ union select distinct from /DF5/I_POCONF_DRAFT
       ConfirmationLinestatus,
       ActionId,
       UoM,
+      PriceUnit,
+      OrderPriceUnit,
+      ConfirmationControlKey,
+      ConfirmationControlCategory,
       Currency,
 
       /* Associations */

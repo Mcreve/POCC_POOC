@@ -6,7 +6,7 @@
 define view /DF5/I_POCONF_CONF
   as select from /DF5/I_POCONFIRMATION
 {
-  key ebeln,
+  key Ebeln,
   key PurchaseOrderItem,
   key SupplierConfirmation,
       PurchaseOrder,
@@ -39,6 +39,10 @@ define view /DF5/I_POCONF_CONF
       'C'        as ConfirmationLinestatus,
       ActionId,
       UoM,
+      PriceUnit,
+      OrderPriceUnit,
+      ConfirmationControlKey,
+      ConfirmationControlCategory,
       Currency,
 
       /* Associations */

@@ -17,6 +17,11 @@ steps:
   persistCredentials: true
   clean: true
 
+- script: |
+    cd ABAP_MM_PO_CONF
+    git checkout main
+  displayName: 'Switch to main branch'
+
 - script: rsync -av --progress MM_PO_CONF/. ABAP_MM_PO_CONF/ --exclude .git
   displayName: 'Copy file content to local folder of GitHub repo'
 

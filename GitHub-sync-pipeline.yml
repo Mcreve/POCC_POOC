@@ -19,9 +19,10 @@ steps:
 - checkout: MyGitHubRepo
 - script: ls ABAP_MM_PO_CONF
 - script: |
-    cp -R MM_PO_CONF ABAP_MM_PO_CONF
+    cp -a MM_PO_CONF ABAP_MM_PO_CONF
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+- script: ls ABAP_MM_PO_CONF
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.

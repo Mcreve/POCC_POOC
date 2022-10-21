@@ -51,4 +51,5 @@ where
   and POHeader.Memory =  ''
   and POHeader.Frgrl  =  ''
   and POHeader.Autlf  <> 'X'
+  and POHeader.Bstyp  = 'F'
   

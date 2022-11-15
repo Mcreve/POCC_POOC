@@ -40,7 +40,6 @@ define view /DF5/I_POCONF_HEAD
       _Items.ConfirmationControlKey,
       _Items.ConfirmationControlCategory,
       POHeader.Waers                as Currency,
-
       /* Associations */
       _Items,
       _Supplier,
@@ -51,4 +50,5 @@ where
   and POHeader.Memory =  ''
   and POHeader.Frgrl  =  ''
   and POHeader.Autlf  <> 'X'
+  and POHeader.Bstyp  = 'F'
   

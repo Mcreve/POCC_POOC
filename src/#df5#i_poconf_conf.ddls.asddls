@@ -44,6 +44,8 @@ define view /DF5/I_POCONF_CONF
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      POCreator,
+      Requisitioner,
 
       /* Associations */
       _Items,

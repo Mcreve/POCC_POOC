@@ -41,6 +41,7 @@ define view /DF5/I_POCONF_HEAD
       _Items[1:inner].ConfirmationControlCategory,
       POHeader.Waers                as Currency,
       POHeader.Ernam as POCreator,
+      _Items[1:inner].Requisitioner,
       /* Associations */
       _Items,
       _Supplier,

@@ -44,7 +44,7 @@ ENDCLASS.
 
 
 
-CLASS /df5/cl_poconfirmation IMPLEMENTATION.
+CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
 
 
   METHOD create_confirmation.

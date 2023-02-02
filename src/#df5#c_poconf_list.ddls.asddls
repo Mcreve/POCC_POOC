@@ -56,6 +56,8 @@ define view entity /DF5/C_POCONF_LIST
       Changed,
       TempStoreLoc,
       TempNetPr,
+      POCreator,
+      Requisitioner,
 
       /* Associations */
       _Header : redirected to parent /DF5/C_POCONF_ID

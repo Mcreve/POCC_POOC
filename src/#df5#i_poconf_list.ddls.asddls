@@ -55,6 +55,8 @@ define view /DF5/I_POCONF_LIST
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      POCreator,
+      Requisitioner,
       ''                              as Changed,
       cast('None' as abap.char( 10 )) as TempStoreLoc,
       cast('None' as abap.char( 10 )) as TempNetPr,

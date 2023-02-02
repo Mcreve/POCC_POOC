@@ -6,44 +6,46 @@
 define view /DF5/I_POCONF_HEAD
   as select from /DF5/I_EKKO as POHeader
 
-  association [0..*] to /DF5/I_POCONF_ITEMS as _Items    on _Items.PurchaseOrder = $projection.Ebeln
+  association [1..*] to /DF5/I_POCONF_ITEMS as _Items    on _Items.PurchaseOrder = $projection.Ebeln
   association [0..1] to I_Supplier          as _Supplier on _Supplier.Supplier = $projection.Supplier
 {
   key POHeader.Ebeln,
-  key _Items.PurchaseOrderItem,
-  key _Items.SupplierConfirmation,
-      _Items.PurchaseOrder          as PurchaseOrder,
+  key _Items[1:inner].PurchaseOrderItem,
+  key _Items[1:inner].SupplierConfirmation,
+      _Items[1:inner].PurchaseOrder          as PurchaseOrder,
       POHeader.Lifnr                as Supplier,
       _Supplier.OrganizationBPName1 as SupplierName,
       POHeader.Ekorg                as PurchOrganisation,
       POHeader.Ekgrp                as PurchGroup,
       POHeader.Bedat                as PODate,
 
-      _Items.Material,
-      _Items.MaterialClass,
-      _Items.RequestedQuantity,
-      _Items.Plant,
-      _Items.StorageLocation,
-      _Items.NetPrice,
-      _Items.ekes_ebeln,
-      _Items.ekes_ebelp,
-      _Items.ekes_eindt,
-      _Items.ekes_menge,
-      _Items.Reference,
-      _Items.ekes_ebtyp,
-      _Items.ReducedQuantity,
-      _Items.eket_eindt,
-      _Items.eket_menge,
-      _Items.UoM,
-      _Items.PriceUnit,
-      _Items.OrderPriceUnit,
-      _Items.ConfirmationControlKey,
-      _Items.ConfirmationControlCategory,
+      _Items[1:inner].Material,
+      _Items[1:inner].MaterialClass,
+      _Items[1:inner].RequestedQuantity,
+      _Items[1:inner].Plant,
+      _Items[1:inner].StorageLocation,
+      _Items[1:inner].NetPrice,
+      _Items[1:inner].ekes_ebeln,
+      _Items[1:inner].ekes_ebelp,
+      _Items[1:inner].ekes_eindt,
+      _Items[1:inner].ekes_menge,
+      _Items[1:inner].Reference,
+      _Items[1:inner].ekes_ebtyp,
+      _Items[1:inner].ReducedQuantity,
+      _Items[1:inner].eket_eindt,
+      _Items[1:inner].eket_menge,
+      _Items[1:inner].UoM,
+      _Items[1:inner].PriceUnit,
+      _Items[1:inner].OrderPriceUnit,
+      _Items[1:inner].ConfirmationControlKey,
+      _Items[1:inner].ConfirmationControlCategory,
       POHeader.Waers                as Currency,
+      POHeader.Ernam as POCreator,
+      _Items[1:inner].Requisitioner,
       /* Associations */
       _Items,
       _Supplier,
-      _Items._Product
+      _Items[1:inner]._Product
 }
 where
       POHeader.Loekz  =  ''

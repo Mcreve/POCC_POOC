@@ -56,6 +56,8 @@ define view /DF5/I_POCONFIRMATION
       ConfirmationControlCategory,
       @Semantics.currencyCode: true
       Currency,
+      POCreator,
+      Requisitioner,
 
       /* Associations */
       _Items,

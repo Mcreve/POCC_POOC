@@ -44,7 +44,7 @@ ENDCLASS.
 
 
 
-CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
+CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
 
   METHOD create_confirmation.
@@ -206,15 +206,12 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
           ls_poheader      TYPE bapimepoheader, "TODO: Not released
           ls_poheaderx     TYPE bapimepoheaderx, "TODO: Not released
           lt_return_change TYPE STANDARD TABLE OF bapiret2,
-          ls_poitem        TYPE bapimepoitem, "TODO: Not released
-          lt_poitem        TYPE STANDARD TABLE OF bapimepoitem, "TODO: Not released
-          ls_poitemx       TYPE bapimepoitemx, "TODO: Not released
-          lt_poitemx       TYPE STANDARD TABLE OF bapimepoitemx, "TODO: Not released
+          ls_upd_item      TYPE STRUCTURE FOR UPDATE i_purchaseorderitemtp_2,
+          lt_upd_item      TYPE TABLE FOR UPDATE i_purchaseorderitemtp_2,
           ls_poschedule    TYPE bapimeposchedule, "TODO: Not released
           lt_poschedule    TYPE STANDARD TABLE OF bapimeposchedule, "TODO: Not released
           ls_poschedulex   TYPE bapimeposchedulx, "TODO: Not released
-          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx, "TODO: Not released
-          ls_lines         TYPE /df5/i_poconf_list.
+          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx. "TODO: Not released.
 
     /df5/cl_me_po_confirm=>me_po_confirm(
       EXPORTING
@@ -237,47 +234,31 @@ CLASS /DF5/CL_POCONFIRMATION IMPLEMENTATION.
     ENDIF.
 
     IF iv_updatepo = abap_true.
-      LOOP AT it_poupdates INTO ls_lines.
-        ls_poitem-po_item = ls_lines-purchaseorderline.
-        ls_poitem-stge_loc = ls_lines-storagelocation.
-        ls_poitem-net_price = ls_lines-netprice.
-        lt_poitem = VALUE #( BASE lt_poitem ( ls_poitem ) ).
 
-        ls_poitemx-po_item = ls_lines-purchaseorderline.
-        ls_poitemx-stge_loc = 'X'.
-        ls_poitemx-net_price = 'X'.
-        lt_poitemx = VALUE #( BASE lt_poitemx ( ls_poitemx ) ).
-      ENDLOOP.
+      lt_upd_item = VALUE #( FOR ls_item IN it_poupdates ( %key-purchaseorder        = ls_item-purchaseorder
+                                                            %key-purchaseorderitem   = ls_item-purchaseorderline
+                                                            storagelocation          = ls_item-storagelocation
+                                                            netpriceamount           = ls_item-netprice
+                                                            %control-storagelocation = if_abap_behv=>mk-on
+                                                            %control-netpriceamount  = if_abap_behv=>mk-on ) ).
 
-      /df5/cl_bapi_po_change=>bapi_po_change(
-        EXPORTING
-          iv_destination   = 'NONE'
-          iv_purchaseorder = iv_ebeln
-          is_poheader      = ls_poheader
-          is_poheaderx     = ls_poheaderx
-        CHANGING
-          ct_return        = lt_return_change
-          ct_poitem        = lt_poitem
-          ct_poitemx       = lt_poitemx ).
+      IF lt_upd_item IS NOT INITIAL.
+        MODIFY ENTITIES OF i_purchaseordertp_2
+          ENTITY purchaseorderitem UPDATE FROM lt_upd_item
+          MAPPED DATA(ls_mapped)
+          FAILED DATA(ls_failed)
+          REPORTED DATA(ls_reported).
 
-      IF sy-subrc = 0.
-        LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<ls_return2>).
-          IF <ls_return2>-type = 'E' OR <ls_return2>-type = 'A'
-          OR ( <ls_return2>-id = 'ME' AND <ls_return2>-number = '664' ).
+        IF lines( ls_failed-purchaseorder ) <> 0 OR lines( ls_reported-purchaseorder ) <> 0.
+          COMMIT ENTITIES RESPONSE OF i_purchaseordertp_2 FAILED DATA(ls_failed_u) REPORTED DATA(ls_reported_u).
+          IF lines( ls_failed_u-purchaseorder ) <> 0 OR lines( ls_reported_u-purchaseorder ) <> 0.
             ev_errors = abap_true.
-
-            IF <ls_return2>-id = 'ME' AND <ls_return2>-number = '664'.
-              "Change log type from Success to error in order to get result
-              <ls_return2>-type = 'E'.
-            ENDIF.
           ENDIF.
+        ELSE.
+          ev_errors = abap_true.
+        ENDIF.
 
-          APPEND <ls_return2> TO et_return.
-        ENDLOOP.
-      ELSE.
-        ev_errors = abap_true.
       ENDIF.
-
     ENDIF.
   ENDMETHOD.
 ENDCLASS.

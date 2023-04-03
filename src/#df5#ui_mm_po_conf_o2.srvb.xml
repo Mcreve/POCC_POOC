@@ -4,7 +4,7 @@
   <asx:values>
    <SRVB>
     <METADATA>
-     <NAME>/DF5/UI_POCONF_O2</NAME>
+     <NAME>/DF5/UI_MM_PO_CONF_O2</NAME>
      <TYPE>SRVB/SVB</TYPE>
      <DESCRIPTION>PO Confirmation</DESCRIPTION>
      <LINKS>
@@ -14,13 +14,13 @@
        <TITLE>Historic versions</TITLE>
       </item>
       <item>
-       <HREF>/sap/bc/adt/repository/informationsystem/abaplanguageversions?uri=%2Fsap%2Fbc%2Fadt%2Fbusinessservices%2Fbindings%2F%252fdf5%252fui_poconf_o2</HREF>
+       <HREF>/sap/bc/adt/repository/informationsystem/abaplanguageversions?uri=%2Fsap%2Fbc%2Fadt%2Fbusinessservices%2Fbindings%2F%252fdf5%252fui_mm_po_conf_o2</HREF>
        <REL>http://www.sap.com/adt/relations/informationsystem/abaplanguageversions</REL>
        <TYPE>application/vnd.sap.adt.nameditems.v1+xml</TYPE>
        <TITLE>Allowed ABAP language versions</TITLE>
       </item>
       <item>
-       <HREF>/sap/bc/adt/businessservices/odatav2/%2FDF5%2FUI_POCONF_O2</HREF>
+       <HREF>/sap/bc/adt/businessservices/odatav2/%2FDF5%2FUI_MM_PO_CONF_O2</HREF>
        <REL>http://www.sap.com/categories/odatav2</REL>
        <TYPE>application/vnd.sap.adt.businessservices.odatav2.v2+xml</TYPE>
        <TITLE>ODATAV2</TITLE>
@@ -44,18 +44,18 @@
        <TITLE>SemanticVersion</TITLE>
       </item>
      </LINKS>
-     <RESPONSIBLE>CREVEM</RESPONSIBLE>
+     <RESPONSIBLE>POCHINOTB</RESPONSIBLE>
      <MASTER_LANGUAGE>EN</MASTER_LANGUAGE>
     </METADATA>
     <CONTENT>
      <BIND_TYPE_IMPL>
-      <NAME>/DF5/UI_POCONF_O2</NAME>
+      <NAME>/DF5/UI_MM_PO_CONF_O2</NAME>
      </BIND_TYPE_IMPL>
      <BIND_TYPE>ODATA</BIND_TYPE>
      <BIND_TYPE_VERSION>V2</BIND_TYPE_VERSION>
      <SERVICES>
       <item>
-       <SERVICE_NAME>/DF5/UI_POCONF_O2</SERVICE_NAME>
+       <SERVICE_NAME>/DF5/UI_MM_PO_CONF_O2</SERVICE_NAME>
        <SERVICE_CONTENT>
         <item>
          <SERVICE_VERSION>0001</SERVICE_VERSION>
@@ -75,6 +75,7 @@
       </item>
      </SERVICES>
     </CONTENT>
+    <PUBLISHED>true</PUBLISHED>
     <BINDING_CREATED>true</BINDING_CREATED>
    </SRVB>
   </asx:values>

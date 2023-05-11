@@ -32,6 +32,7 @@ define view /DF5/I_POCONF_ITEMS
       PurchaseOrders.Meins       as UoM,
       PurchaseOrders.Peinh       as PriceUnit,
       PurchaseOrders.Bprme       as OrderPriceUnit,
+      PurchaseOrders.Repos       as InvoiceReceiptIndicator,
       PurchaseOrders.Afnam       as Requisitioner,
 
       PurchaseOrders.Loekz,

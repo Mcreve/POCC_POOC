@@ -1,17 +1,9 @@
 @EndUserText.label: 'PO Confirmation'
 define service /DF5/SD_POCONF {
-  expose /DF5/C_POCONF_LIST as POConfList;
-  expose /DF5/C_POCONF_LOG as POConf_Log;
-  expose /DF5/C_POCONF_ID as POConf_ID;
-  expose /DF5/C_ACTIONID as ActionID;
-  expose /DF5/C_SUPPLIERCONFIRMATION as SupplierConfirmation;
-  expose /DF5/C_PRODUCTSTORAGELOC_VH as ProductStorageLocVH;
-  expose /DF5/C_MM_SMPLSUPPLIER_VH as SmplSupplierVH;
-  expose /DF5/C_PRODUCTGROUP_2_VH as ProductGroup;
-  expose /DF5/C_PURCHASINGORG_VH as PurchasingOrgVH;
-  expose /DF5/C_PURCHASINGGROUP_VH as PurchasingGroupVH;
-  expose /DF5/C_SUPPLIERCONFCATEGORY_VH as SupplierConfCategoryVH;
-  expose /DF5/C_SUPPLIERCONFCTRLKEY_VH as SupplierConfCtrlKeyVH;
-  expose /DF5/I_MM_PRODUCT_VH as ProductVH;
-  expose /DF5/I_PLANTPURCHASINGORG_VH as PlantPurchasingOrgVH;
+  expose /DF5/C_POCONF_LIST;
+  expose /DF5/C_POCONF_LOG;
+  expose /DF5/C_POCONF_ID;
+  expose /DF5/C_ACTIONID;
+  expose /DF5/C_SUPPLIERCONFIRMATION;
+  expose /DF5/C_PRODUCTSTORAGELOC_VH;
 }

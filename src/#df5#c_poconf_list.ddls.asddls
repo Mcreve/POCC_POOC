@@ -53,6 +53,7 @@ define view entity /DF5/C_POCONF_LIST
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      InvoiceReceiptIndicator,
       Changed,
       TempStoreLoc,
       TempNetPr,

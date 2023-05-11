@@ -12,7 +12,7 @@ define view /DF5/I_POCONF_HEAD
   key POHeader.Ebeln,
   key _Items[1:inner].PurchaseOrderItem,
   key _Items[1:inner].SupplierConfirmation,
-      _Items[1:inner].PurchaseOrder          as PurchaseOrder,
+      _Items[1:inner].PurchaseOrder as PurchaseOrder,
       POHeader.Lifnr                as Supplier,
       _Supplier.OrganizationBPName1 as SupplierName,
       POHeader.Ekorg                as PurchOrganisation,
@@ -40,7 +40,8 @@ define view /DF5/I_POCONF_HEAD
       _Items[1:inner].ConfirmationControlKey,
       _Items[1:inner].ConfirmationControlCategory,
       POHeader.Waers                as Currency,
-      POHeader.Ernam as POCreator,
+      _Items[1:inner].InvoiceReceiptIndicator,
+      POHeader.Ernam                as POCreator,
       _Items[1:inner].Requisitioner,
       /* Associations */
       _Items,
@@ -52,5 +53,4 @@ where
   and POHeader.Memory =  ''
   and POHeader.Frgrl  =  ''
   and POHeader.Autlf  <> 'X'
-  and POHeader.Bstyp  = 'F'
-  
+  and POHeader.Bstyp  =  'F'

@@ -40,6 +40,7 @@ define view /DF5/I_POCONF_UNION
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
 
@@ -84,6 +85,7 @@ union select from /DF5/I_POCONF_NOTCONF
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
 
@@ -128,6 +130,7 @@ union select distinct from /DF5/I_POCONF_DRAFT
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
 

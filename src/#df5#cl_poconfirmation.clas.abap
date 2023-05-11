@@ -74,6 +74,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
       ls_action            TYPE /df5/db_acid.
 
 *    lv_errors = abap_false. "Default is abap_false
+    SORT cs_buffer-mt_buffer_line_item BY purchaseorder purchaseorderline.
     LOOP AT cs_buffer-mt_buffer_line_item INTO ls_polist GROUP BY ls_polist-purchaseorder.
       LOOP AT GROUP ls_polist INTO ls_line.
         IF lv_ebelp <> ls_line-purchaseorderline.
@@ -206,12 +207,17 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
           ls_poheader      TYPE bapimepoheader, "TODO: Not released
           ls_poheaderx     TYPE bapimepoheaderx, "TODO: Not released
           lt_return_change TYPE STANDARD TABLE OF bapiret2,
-          ls_upd_item      TYPE STRUCTURE FOR UPDATE i_purchaseorderitemtp_2,
-          lt_upd_item      TYPE TABLE FOR UPDATE i_purchaseorderitemtp_2,
+          ls_poitem        TYPE bapimepoitem, "TODO: Not released
+          lt_poitem        TYPE STANDARD TABLE OF bapimepoitem, "TODO: Not released
+          ls_poitemx       TYPE bapimepoitemx, "TODO: Not released
+          lt_poitemx       TYPE STANDARD TABLE OF bapimepoitemx, "TODO: Not released
+*          ls_upd_item      TYPE STRUCTURE FOR UPDATE i_purchaseorderitemtp_2,
+*          lt_upd_item      TYPE TABLE FOR UPDATE i_purchaseorderitemtp_2,
           ls_poschedule    TYPE bapimeposchedule, "TODO: Not released
           lt_poschedule    TYPE STANDARD TABLE OF bapimeposchedule, "TODO: Not released
           ls_poschedulex   TYPE bapimeposchedulx, "TODO: Not released
-          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx. "TODO: Not released.
+          lt_poschedulex   TYPE STANDARD TABLE OF bapimeposchedulx, "TODO: Not released
+          ls_lines         TYPE /df5/i_poconf_list.
 
     /df5/cl_me_po_confirm=>me_po_confirm(
       EXPORTING
@@ -221,7 +227,10 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
         it_confirmation  = it_confirmations
         it_confirmationx = it_confirmationsx
       IMPORTING
-        et_return        = et_return ).
+        et_return        = et_return
+        es_exp_header       = DATA(ls_exp_header)
+        et_exp_item         = DATA(lt_exp_item)
+        et_exp_confirmation = DATA(lt_exp_confirmation) ).
 
     IF sy-subrc = 0.
       LOOP AT et_return ASSIGNING FIELD-SYMBOL(<ls_return>).
@@ -234,31 +243,73 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
     ENDIF.
 
     IF iv_updatepo = abap_true.
+      LOOP AT it_poupdates INTO ls_lines.
+        ls_poitem-po_item = ls_lines-purchaseorderline.
+        ls_poitem-stge_loc = ls_lines-storagelocation.
+        ls_poitem-net_price = ls_lines-netprice.
+        ls_poitem-conf_ctrl = ls_lines-confirmationcontrolkey.
+        lt_poitem = VALUE #( BASE lt_poitem ( ls_poitem ) ).
 
-      lt_upd_item = VALUE #( FOR ls_item IN it_poupdates ( %key-purchaseorder        = ls_item-purchaseorder
-                                                            %key-purchaseorderitem   = ls_item-purchaseorderline
-                                                            storagelocation          = ls_item-storagelocation
-                                                            netpriceamount           = ls_item-netprice
-                                                            %control-storagelocation = if_abap_behv=>mk-on
-                                                            %control-netpriceamount  = if_abap_behv=>mk-on ) ).
+        ls_poitemx-po_item = ls_lines-purchaseorderline.
+        ls_poitemx-stge_loc = abap_true.
+        ls_poitemx-net_price = abap_true.
+        ls_poitemx-conf_ctrl = abap_true.
+        lt_poitemx = VALUE #( BASE lt_poitemx ( ls_poitemx ) ).
+      ENDLOOP.
 
-      IF lt_upd_item IS NOT INITIAL.
-        MODIFY ENTITIES OF i_purchaseordertp_2
-          ENTITY purchaseorderitem UPDATE FROM lt_upd_item
-          MAPPED DATA(ls_mapped)
-          FAILED DATA(ls_failed)
-          REPORTED DATA(ls_reported).
+      /df5/cl_bapi_po_change=>bapi_po_change(
+        EXPORTING
+          iv_destination   = 'NONE'
+          iv_purchaseorder = iv_ebeln
+          is_poheader      = ls_poheader
+          is_poheaderx     = ls_poheaderx
+        CHANGING
+          ct_return        = lt_return_change
+          ct_poitem        = lt_poitem
+          ct_poitemx       = lt_poitemx ).
 
-        IF lines( ls_failed-purchaseorder ) <> 0 OR lines( ls_reported-purchaseorder ) <> 0.
-          COMMIT ENTITIES RESPONSE OF i_purchaseordertp_2 FAILED DATA(ls_failed_u) REPORTED DATA(ls_reported_u).
-          IF lines( ls_failed_u-purchaseorder ) <> 0 OR lines( ls_reported_u-purchaseorder ) <> 0.
+      IF sy-subrc = 0.
+        LOOP AT lt_return_change ASSIGNING FIELD-SYMBOL(<ls_return2>).
+          IF <ls_return2>-type = 'E' OR <ls_return2>-type = 'A'
+          OR ( <ls_return2>-id = 'ME' AND <ls_return2>-number = '664' ).
             ev_errors = abap_true.
-          ENDIF.
-        ELSE.
-          ev_errors = abap_true.
-        ENDIF.
 
+            IF <ls_return2>-id = 'ME' AND <ls_return2>-number = '664'.
+              "Change log type from Success to error in order to get result
+              <ls_return2>-type = 'E'.
+            ENDIF.
+          ENDIF.
+
+          APPEND <ls_return2> TO et_return.
+        ENDLOOP.
+      ELSE.
+        ev_errors = abap_true.
       ENDIF.
+
+*      lt_upd_item = VALUE #( FOR ls_item IN it_poupdates ( %key-purchaseorder        = ls_item-purchaseorder
+*                                                            %key-purchaseorderitem   = ls_item-purchaseorderline
+*                                                            storagelocation          = ls_item-storagelocation
+*                                                            netpriceamount           = ls_item-netprice
+*                                                            %control-storagelocation = if_abap_behv=>mk-on
+*                                                            %control-netpriceamount  = if_abap_behv=>mk-on ) ).
+*
+*      IF lt_upd_item IS NOT INITIAL.
+*        MODIFY ENTITIES OF i_purchaseordertp_2
+*          ENTITY purchaseorderitem UPDATE FROM lt_upd_item
+*          MAPPED DATA(ls_mapped)
+*          FAILED DATA(ls_failed)
+*          REPORTED DATA(ls_reported).
+*
+*        IF lines( ls_failed-purchaseorder ) <> 0 OR lines( ls_reported-purchaseorder ) <> 0.
+*          COMMIT ENTITIES RESPONSE OF i_purchaseordertp_2 FAILED DATA(ls_failed_u) REPORTED DATA(ls_reported_u).
+*          IF lines( ls_failed_u-purchaseorder ) <> 0 OR lines( ls_reported_u-purchaseorder ) <> 0.
+*            ev_errors = abap_true.
+*          ENDIF.
+*        ELSE.
+*          ev_errors = abap_true.
+*        ENDIF.
+*
+*      ENDIF.
     ENDIF.
   ENDMETHOD.
 ENDCLASS.

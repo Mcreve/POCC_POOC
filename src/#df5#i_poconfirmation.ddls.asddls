@@ -56,6 +56,7 @@ define view /DF5/I_POCONFIRMATION
       ConfirmationControlCategory,
       @Semantics.currencyCode: true
       Currency,
+      InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
 
@@ -64,4 +65,5 @@ define view /DF5/I_POCONFIRMATION
       _Supplier,
       _Product
 }
-where PurchaseOrderItem != '00000'
+where
+  PurchaseOrderItem != '00000'

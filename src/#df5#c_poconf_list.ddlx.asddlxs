@@ -123,7 +123,15 @@ annotate view /DF5/C_POCONF_LIST with
 
   @UI.lineItem: [ { position: 250, importance: #LOW } ]
   ReducedQuantity;
-  
+
+  @UI: { selectionField: [ { position: 100 } ],
+         lineItem:       [ { position: 150, importance: #HIGH } ] }
+  POCreator;
+
+  @UI: { selectionField: [ { position: 110 } ],
+         lineItem:       [ { position: 160, importance: #HIGH } ] }
+  Requisitioner;
+
   @UI: { hidden:   true,
          lineItem: [ { position: 250, importance: #LOW } ] }
   Currency;

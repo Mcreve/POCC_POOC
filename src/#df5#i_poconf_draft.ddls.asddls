@@ -41,6 +41,7 @@ define view /DF5/I_POCONF_DRAFT
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
 

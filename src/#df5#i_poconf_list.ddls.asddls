@@ -55,6 +55,7 @@ define view /DF5/I_POCONF_LIST
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
       ''                              as Changed,

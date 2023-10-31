@@ -1,7 +1,7 @@
 @EndUserText.label: 'Mass Confirmation action ID'
 @AccessControl.authorizationCheck: #CHECK
 define root view entity /DF5/C_ACTIONID
-  provider contract transactional_query
+//  provider contract transactional_query
   as projection on /DF5/I_ACTIONID
 {
   key actionid,

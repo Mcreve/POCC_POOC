@@ -52,6 +52,7 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
       ls_polist            TYPE /df5/i_poconf_list,
       ls_line              TYPE /df5/i_poconf_list,
       lt_temppolist        TYPE STANDARD TABLE OF /df5/i_poconf_list WITH EMPTY KEY,
+      lt_unmodified_polist TYPE STANDARD TABLE OF /df5/i_poconf_list,
       lv_purchaseorder     TYPE ebeln,
       ls_poheader          TYPE bapimepoheader, "TODO: Not released
       lv_ebelp             TYPE ebelp,
@@ -75,6 +76,15 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
 
 *    lv_errors = abap_false. "Default is abap_false
     SORT cs_buffer-mt_buffer_line_item BY purchaseorder purchaseorderline.
+
+    "Retrieve unmodified records for customer enhancement
+    SELECT *
+      FROM /df5/i_poconf_list
+      FOR ALL ENTRIES IN @cs_buffer-mt_buffer_line_item
+      WHERE purchaseorder = @cs_buffer-mt_buffer_line_item-purchaseorder
+        AND purchaseorderline = @cs_buffer-mt_buffer_line_item-purchaseorderline
+      INTO TABLE @lt_unmodified_polist.
+
     LOOP AT cs_buffer-mt_buffer_line_item INTO ls_polist GROUP BY ls_polist-purchaseorder.
       LOOP AT GROUP ls_polist INTO ls_line.
         IF lv_ebelp <> ls_line-purchaseorderline.
@@ -182,6 +192,17 @@ CLASS /df5/cl_poconfirmation IMPLEMENTATION.
           communication_failure = 2
           resource_failure      = 3
           OTHERS                = 4.
+
+      "Call customer enhancement BAdI
+      DATA lo_mm_po_conf TYPE REF TO /df5/bd_mm_po_conf.
+      GET BADI lo_mm_po_conf.
+
+      IF lo_mm_po_conf IS NOT INITIAL AND lo_mm_po_conf->imps IS NOT INITIAL.
+        CALL BADI lo_mm_po_conf->after_lines_confirmed
+          EXPORTING
+            it_unmodified_polist = lt_unmodified_polist
+            it_modified_polist   = cs_buffer-mt_buffer_line_item.
+      ENDIF.
 
     ELSE.
       CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'

@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IEKETNRSDA2'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Nearest date for EKET Level 2'
 define view /DF5/I_EKET_NEARESTDATE_2
   as select from    /DF5/I_EKET_NEARESTDATE_3A as _NearestDate

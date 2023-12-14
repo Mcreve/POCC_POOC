@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/ISUPPLCONF'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Supplier Confirmations'
 define root view /DF5/I_SUPPLIERCONFIRMATION
   as select from /DF5/I_EKES

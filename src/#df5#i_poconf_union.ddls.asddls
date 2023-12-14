@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IPOCONFUNIO'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Union for all required lines'
 define view /DF5/I_POCONF_UNION
   as select from /DF5/I_POCONF_CONF
@@ -27,6 +27,7 @@ define view /DF5/I_POCONF_UNION
       ekes_ebelp,
       NextReqDelDate,
       NextRequestedQuantity,
+      QuantityToBeDelivered,
       Reference,
       ekes_ebtyp,
       ReducedQuantity,
@@ -43,6 +44,10 @@ define view /DF5/I_POCONF_UNION
       InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
 
       /* Associations */
       _Items,
@@ -72,6 +77,7 @@ union select from /DF5/I_POCONF_NOTCONF
       ekes_ebelp,
       NextReqDelDate,
       NextRequestedQuantity,
+      QuantityToBeDelivered,
       Reference,
       ekes_ebtyp,
       ReducedQuantity,
@@ -88,6 +94,10 @@ union select from /DF5/I_POCONF_NOTCONF
       InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
 
       /* Associations */
       _Items,
@@ -117,6 +127,7 @@ union select distinct from /DF5/I_POCONF_DRAFT
       ekes_ebelp,
       NextReqDelDate,
       NextRequestedQuantity,
+      QuantityToBeDelivered,
       Reference,
       ekes_ebtyp,
       ReducedQuantity,
@@ -133,6 +144,10 @@ union select distinct from /DF5/I_POCONF_DRAFT
       InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
 
       /* Associations */
       _Items,

@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IPONOTCONF'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'IF for unconfirmed but required lines'
 define view /DF5/I_POCONF_NOTCONF
   as select from /DF5/I_POCONFIRMATION
@@ -28,6 +28,7 @@ define view /DF5/I_POCONF_NOTCONF
       ekes_ebelp,
       NextReqDelDate,
       NextRequestedQuantity,
+      QuantityToBeDelivered,
       Reference,
       ekes_ebtyp,
       ReducedQuantity,
@@ -44,6 +45,10 @@ define view /DF5/I_POCONF_NOTCONF
       InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
 
       /* Associations */
       _Items,

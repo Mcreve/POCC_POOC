@@ -1,5 +1,5 @@
 @EndUserText.label: 'Confirmation line item projection'
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
 define view entity /DF5/C_POCONF_LIST
   as projection on /DF5/I_POCONF_LIST
@@ -32,6 +32,8 @@ define view entity /DF5/C_POCONF_LIST
       NextReqDelDate,
       @EndUserText.label: 'Next Req. Del. Qty.'
       NextRequestedQuantity,
+      @EndUserText.label: 'Qty to be Delivered'
+      QuantityToBeDelivered,
       Reference,
       @EndUserText.label: 'Conf. Del. Date'
       ConfirmedDelDate,
@@ -59,6 +61,10 @@ define view entity /DF5/C_POCONF_LIST
       TempNetPr,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
 
       /* Associations */
       _Header : redirected to parent /DF5/C_POCONF_ID

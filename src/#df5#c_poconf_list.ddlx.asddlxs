@@ -45,7 +45,7 @@ annotate view /DF5/C_POCONF_LIST with
 
   @UI: { selectionField: [ { position: 30 } ],
          lineItem:       [ { position: 100, importance: #HIGH } ] }
-  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PURCHASINGORG_VH', element: 'PurchasingOrganisation' } } ]
+  @Consumption.valueHelpDefinition: [ { entity: { name: '/DF5/C_PURCHASINGORG_VH', element: 'PurchasingOrganization' } } ]
   @Search: { defaultSearchElement: true, ranking: #HIGH, fuzzinessThreshold: 0.8 }
   PurchOrganisation;
 
@@ -103,6 +103,9 @@ annotate view /DF5/C_POCONF_LIST with
   @UI.lineItem: [ { position: 200, importance: #LOW } ]
   NextRequestedQuantity;
 
+  @UI.lineItem: [ { position: 205, importance: #LOW } ]
+  QuantityToBeDelivered;
+
   @UI.lineItem: [ { position: 210, importance: #LOW } ]
   Reference;
 
@@ -131,6 +134,18 @@ annotate view /DF5/C_POCONF_LIST with
   @UI: { selectionField: [ { position: 110 } ],
          lineItem:       [ { position: 160, importance: #HIGH } ] }
   Requisitioner;
+  
+  @UI.lineItem: [ { position: 255, importance: #LOW } ]
+  InvoiceIsExpected;
+  
+  @UI.lineItem: [ { position: 260, importance: #LOW } ]
+  SupplierMaterialNumber;
+  
+  @UI.lineItem: [ { position: 265, importance: #LOW } ]
+  ManufacturerPartNmbr;
+  
+  @UI.lineItem: [ { position: 270, importance: #LOW } ]
+  NetAmount;
 
   @UI: { hidden:   true,
          lineItem: [ { position: 250, importance: #LOW } ] }

@@ -1,7 +1,7 @@
 @EndUserText.label: 'Supplier Confirmations projection'
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 define root view entity /DF5/C_SUPPLIERCONFIRMATION
-//  provider contract transactional_query
+  provider contract transactional_query
   as projection on /DF5/I_SUPPLIERCONFIRMATION
 {
   key PurchaseOrder,

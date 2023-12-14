@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IPOCONFCONF'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: '(partially) confirmed Sales Order'
 define view /DF5/I_POCONF_CONF
   as select from /DF5/I_POCONFIRMATION
@@ -28,6 +28,7 @@ define view /DF5/I_POCONF_CONF
       ekes_ebelp,
       NextReqDelDate,
       NextRequestedQuantity,
+      QuantityToBeDelivered,
       Reference,
       ekes_ebtyp,
       ReducedQuantity,
@@ -47,6 +48,10 @@ define view /DF5/I_POCONF_CONF
       InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
 
       /* Associations */
       _Items,

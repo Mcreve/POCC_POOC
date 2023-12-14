@@ -104,9 +104,9 @@ CLASS ltc_/df5/i_poconf_head IMPLEMENTATION.
         dpamt = '0.00 '
         dpdat = '00000000'
         releasedate = '00000000'
-*        inco2key = '00000000000000000000000000000000'
-*        inco3key = '00000000000000000000000000000000'
-*        inco4key = '00000000000000000000000000000000'
+        inco2key = '00000000000000000000000000000000'
+        inco3key = '00000000000000000000000000000000'
+        inco4key = '00000000000000000000000000000000'
         grwcu = 'EUR'
         qtnerlstsubmsndate = '00000000'
         extrevtmstmp = '0.0000000 '
@@ -188,7 +188,7 @@ CLASS ltc_/df5/i_poconf_head IMPLEMENTATION.
         formofaddress = 'Company'
         birthdate = '00000000'
         sortfield = 'LIEFDE6'
-*        brspcfctaxbasepercentagecode = '0'
+        brspcfctaxbasepercentagecode = '0'
       ) ).
     environment->insert_test_data( i_data = lt_i_supplier ).
 

@@ -1,9 +1,6 @@
-@AbapCatalog.sqlViewName: '/DF5/IPOCONFHEAD'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Purchase Order Confirmations header'
-define view /DF5/I_POCONF_HEAD
+define view entity /DF5/I_POCONF_HEAD
   as select from /DF5/I_EKKO as POHeader
 
   association [1..*] to /DF5/I_POCONF_ITEMS as _Items    on _Items.PurchaseOrder = $projection.Ebeln
@@ -24,6 +21,7 @@ define view /DF5/I_POCONF_HEAD
       _Items[1:inner].RequestedQuantity,
       _Items[1:inner].Plant,
       _Items[1:inner].StorageLocation,
+      @Semantics.amount.currencyCode: 'Currency'
       _Items[1:inner].NetPrice,
       _Items[1:inner].ekes_ebeln,
       _Items[1:inner].ekes_ebelp,
@@ -34,6 +32,7 @@ define view /DF5/I_POCONF_HEAD
       _Items[1:inner].ReducedQuantity,
       _Items[1:inner].eket_eindt,
       _Items[1:inner].eket_menge,
+      _Items[1:inner].QuantityToBeDelivered,
       _Items[1:inner].UoM,
       _Items[1:inner].PriceUnit,
       _Items[1:inner].OrderPriceUnit,
@@ -43,6 +42,12 @@ define view /DF5/I_POCONF_HEAD
       _Items[1:inner].InvoiceReceiptIndicator,
       POHeader.Ernam                as POCreator,
       _Items[1:inner].Requisitioner,
+      _Items[1:inner].InvoiceIsExpected,
+      _Items[1:inner].SupplierMaterialNumber,
+      _Items[1:inner].ManufacturerPartNmbr,
+      @Semantics.amount.currencyCode: 'Currency'
+      _Items[1:inner].NetAmount,
+      
       /* Associations */
       _Items,
       _Supplier,

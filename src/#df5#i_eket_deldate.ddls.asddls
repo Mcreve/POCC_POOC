@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IEKETDELDAT'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Transpose to one eket line closest date'
 define view /DF5/I_EKET_DELDATE
   as select from /DF5/I_EKET             as _eket

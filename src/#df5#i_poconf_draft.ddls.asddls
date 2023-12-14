@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IPOCONFDRAF'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Empty Line for partially confirmd Orders'
 define view /DF5/I_POCONF_DRAFT
   as select from /DF5/I_POCONF_CONF
@@ -28,6 +28,7 @@ define view /DF5/I_POCONF_DRAFT
       ekes_ebelp,
       NextReqDelDate,
       TotalUnconfirmed as NextRequestedQuantity,
+      QuantityToBeDelivered,
       ''               as Reference,
       ekes_ebtyp,
       0                as ReducedQuantity,
@@ -44,6 +45,10 @@ define view /DF5/I_POCONF_DRAFT
       InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
 
       /* Associations */
       _Items,

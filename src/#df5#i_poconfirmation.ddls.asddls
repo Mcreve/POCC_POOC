@@ -1,9 +1,6 @@
-@AbapCatalog.sqlViewName: '/DF5/I_POCONFIRM'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Helper interface for PO Confirmations'
-define view /DF5/I_POCONFIRMATION
+define view entity /DF5/I_POCONFIRMATION
   as select from /DF5/I_POCONF_HEAD
   association [1..1] to /DF5/I_POCONF_SUM as _sum on  _sum.PurchaseOrder     = $projection.PurchaseOrder
                                                   and _sum.PurchaseOrderItem = $projection.PurchaseOrderItem
@@ -38,6 +35,7 @@ define view /DF5/I_POCONFIRMATION
       eket_eindt                   as NextReqDelDate,
       @Semantics.quantity.unitOfMeasure : 'UoM'
       eket_menge                   as NextRequestedQuantity,
+      QuantityToBeDelivered,
       Reference,
       ekes_ebtyp,
       @Semantics.quantity.unitOfMeasure : 'UoM'
@@ -48,17 +46,19 @@ define view /DF5/I_POCONFIRMATION
       eket_eindt,
       eket_menge,
       cast('0' as abap.char( 22 )) as ActionId,
-      @Semantics.unitOfMeasure: true
       UoM,
       PriceUnit,
       OrderPriceUnit,
       ConfirmationControlKey,
       ConfirmationControlCategory,
-      @Semantics.currencyCode: true
       Currency,
       InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
 
       /* Associations */
       _Items,

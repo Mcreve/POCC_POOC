@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IPOCONFID'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Interface for PO Confirmation actions'
 define view /DF5/I_POCONF_ID
   as select from /df5/db_pcid

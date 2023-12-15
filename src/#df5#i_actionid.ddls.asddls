@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IACTIONID'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'IF for mass confirmation action id'
 define root view /DF5/I_ACTIONID
   as select from /df5/db_acid

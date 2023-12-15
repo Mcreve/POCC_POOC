@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IMMSMPSUPVH'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Simple Supplier Value help'
 @Search.searchable: true
 @ObjectModel.semanticKey: ['Supplier', 'CompanyCode']

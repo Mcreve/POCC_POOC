@@ -5,6 +5,7 @@
 [
 "/DF5/I_EKES",
 "/DF5/I_EKET_DELDATEQTY",
+"/DF5/I_EKKO",
 "/DF5/I_EKPO",
 "/DF5/I_T163G"
 ],
@@ -18,6 +19,8 @@
 "BASE":
 [],
 "ANNO_REF":
+[],
+"SCALAR_FUNCTION":
 [],
 "VERSION":0,
 "ANNOREF_EVALUATION_ERROR":""

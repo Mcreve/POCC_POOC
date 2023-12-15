@@ -1,5 +1,5 @@
 @EndUserText.label: 'Log Po creations'
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 define view entity /DF5/C_POCONF_LOG
   as projection on /DF5/I_POCONF_LOG
 {

@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: '/DF5/IPOCONFLOG'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Log handle messages'
 define view /DF5/I_POCONF_LOG
   as select from /df5/db_poco

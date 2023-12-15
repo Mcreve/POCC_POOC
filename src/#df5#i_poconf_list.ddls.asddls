@@ -1,9 +1,6 @@
-@AbapCatalog.sqlViewName: '/DF5/IPOCONFLIST'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Interface for PO Confirmation List view'
-define view /DF5/I_POCONF_LIST
+define view entity /DF5/I_POCONF_LIST
   as select from /DF5/I_POCONF_UNION as Orders
   association [1] to /DF5/I_LINESTATUS        as _LineStatusText        on  $projection.ConfirmationStatus = _LineStatusText.LineStatus
   association [1] to /DF5/I_CONFIRMLINESTATUS as _ConfirmLineStatusText on  $projection.ConfirmationLinestatus = _ConfirmLineStatusText.ConfirmationLineStatus
@@ -28,6 +25,7 @@ define view /DF5/I_POCONF_LIST
       TotalUnconfirmed,
       NextReqDelDate,
       NextRequestedQuantity,
+      QuantityToBeDelivered,
       Reference,
       ConfirmedDelDate,
       Quantity,
@@ -55,8 +53,13 @@ define view /DF5/I_POCONF_LIST
       ConfirmationControlKey,
       ConfirmationControlCategory,
       Currency,
+      InvoiceReceiptIndicator,
       POCreator,
       Requisitioner,
+      InvoiceIsExpected,
+      SupplierMaterialNumber,
+      ManufacturerPartNmbr,
+      NetAmount,
       ''                              as Changed,
       cast('None' as abap.char( 10 )) as TempStoreLoc,
       cast('None' as abap.char( 10 )) as TempNetPr,
